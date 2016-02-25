@@ -5,6 +5,8 @@
 
 #include "SDL.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -67,6 +69,7 @@ void shader_program::link()
     bind_attributes();
     glLinkProgram(priv->program.get());
     glValidateProgram(priv->program.get());
+    get_all_uniform_locations();
 }
 
 void shader_program::start()
@@ -83,6 +86,32 @@ void shader_program::bind_attribute(GLuint attribute,
                                     const std::string& variable_name)
 {
     glBindAttribLocation(priv->program.get(), attribute, variable_name.c_str());
+}
+
+GLint shader_program::get_uniform_location(const std::string& uniform_name)
+{
+    return glGetUniformLocation(priv->program.get(), uniform_name.c_str());
+}
+
+void shader_program::load_float(GLint location, float value)
+{
+    glUniform1f(location, value);
+}
+
+void shader_program::load_vector(int location, const glm::vec3& vec)
+{
+    glUniform3fv(location, 1, glm::value_ptr(vec));
+}
+
+void shader_program::load_bool(int location, bool value)
+{
+    float v = value ? 1.0f : 0.0f;
+    glUniform1f(location, v);
+}
+
+void shader_program::load_matrix(int location, const glm::mat4& matrix)
+{
+    glUniformMatrix4fv(location, GL_FALSE, 1, glm::value_ptr(matrix));
 }
 
 }
