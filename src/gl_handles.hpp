@@ -1,12 +1,12 @@
 
-#ifndef KTX_VIEWER_GL_HANDLES_HPP
-#define KTX_VIEWER_GL_HANDLES_HPP
+#ifndef JAC_GL_HANDLES_HPP
+#define JAC_GL_HANDLES_HPP
 
 #include <glad/glad.h>
 #include <algorithm>
 #include <array>
 
-namespace ktxv {
+namespace jac {
 namespace gl {
 
 namespace detail {
@@ -120,6 +120,6 @@ using texture_handle = detail::multi_handle<detail::gl_texture_deleter>;
 using vertex_array_handle = detail::multi_handle<detail::gl_vertex_array_deleter>;
 
 } // end namespace gl
-} // end namespace ktxv
+} // end namespace jac
 
 #endif

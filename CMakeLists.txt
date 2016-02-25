@@ -11,7 +11,10 @@ find_package(SDL2 REQUIRED)
 add_executable(jac
     src/display_manager.cpp
     src/glad.c
+    src/loader.cpp
     src/main_game_loop.cpp
+    src/raw_model.cpp
+    src/renderer.cpp
 )
 
 target_include_directories(jac PRIVATE

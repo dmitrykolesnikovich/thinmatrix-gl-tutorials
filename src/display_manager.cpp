@@ -66,7 +66,11 @@ display create_display()
 
     glad_set_post_callback(error_check_callback);
 
-    glViewport(0, 0, width, height);
+    {
+        int w, h;
+        SDL_GL_GetDrawableSize(window, &w, &h);
+        glViewport(0, 0, w, h);
+    }
 
     return { sdl_window_ptr(window), sdl_gl_context{ctx} };
 }
