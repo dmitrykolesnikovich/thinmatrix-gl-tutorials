@@ -17,16 +17,19 @@ int main()
 
     auto renderer = jac::renderer{};
 
-    std::vector<float> vertices{
-        -0.5f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f
+    std::vector<float> vertices = {
+      -0.5f, 0.5f, 0.0f,
+      -0.5f, -0.5f, 0.0f,
+      0.5f, -0.5f, 0.0f,
+      0.5f, 0.5f, 0.0f
     };
 
-    auto model = loader.load_to_vao(vertices);
+    std::vector<int> indices = {
+      0,1,3,
+      3,1,2
+    };
+
+    auto model = loader.load_to_vao(vertices, indices);
 
     bool quit_requested = false;
     while (!quit_requested) {

@@ -19,15 +19,19 @@ struct loader::pimpl {
         return vao_id;
     }
 
+    auto create_vbo()
+    {
+        gl::buffer_handle vbo;
+        glGenBuffers(1, &vbo);
+        auto vbo_id = vbo.get();
+        vbos.push_back(std::move(vbo));
+        return vbo_id;
+    }
+
     void store_data_in_attribute_list(GLuint attrib_num,
                                       const std::vector<float>& data)
     {
-        {
-            gl::buffer_handle vbo;
-            glGenBuffers(1, &vbo);
-            vbos.push_back(std::move(vbo));
-        }
-        GLuint vbo_id = vbos.back().get();
+        GLuint vbo_id = create_vbo();
         glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 
         glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float),
@@ -42,6 +46,14 @@ struct loader::pimpl {
     {
         glBindVertexArray(0);
     }
+
+    void bind_indices_buffer(const std::vector<int>& indices)
+    {
+        GLuint vbo = create_vbo();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int),
+                     indices.data(), GL_STATIC_DRAW);
+    }
 };
 
 loader::loader() : priv{std::make_unique<pimpl>()} {}
@@ -50,12 +62,14 @@ loader& loader::operator=(loader&&) = default;
 loader::~loader() = default;
 
 raw_model
-loader::load_to_vao(const std::vector<float>& data)
+loader::load_to_vao(const std::vector<float>& data,
+                    const std::vector<int>& indices)
 {
     auto vao_id = priv->create_vao();
+    priv->bind_indices_buffer(indices);
     priv->store_data_in_attribute_list(0, data);
     priv->unbind_vao();
-    raw_model model{vao_id, int(data.size()/3)};
+    raw_model model{vao_id, int(indices.size())};
     return model;
 }
 

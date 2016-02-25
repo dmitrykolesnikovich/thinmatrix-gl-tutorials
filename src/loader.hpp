@@ -16,7 +16,8 @@ public:
     loader& operator=(loader&&);
     ~loader();
 
-    raw_model load_to_vao(const std::vector<float>& data);
+    raw_model load_to_vao(const std::vector<float>& data,
+                          const std::vector<int>& indices);
 
 private:
     struct pimpl;
