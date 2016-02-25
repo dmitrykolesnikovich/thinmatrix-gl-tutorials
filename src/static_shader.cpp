@@ -15,6 +15,7 @@ static_shader::static_shader()
 void static_shader::bind_attributes()
 {
     bind_attribute(0, "position");
+    bind_attribute(1, "texture_coords");
 }
 
 

@@ -5,6 +5,7 @@
 #include "raw_model.hpp"
 
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace jac {
@@ -17,7 +18,10 @@ public:
     ~loader();
 
     raw_model load_to_vao(const std::vector<float>& data,
+                          const std::vector<float>& texture_coords,
                           const std::vector<int>& indices);
+
+    GLuint load_texture(const std::string& filename);
 
 private:
     struct pimpl;

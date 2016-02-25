@@ -40,8 +40,8 @@ void error_check_callback(const char* name, void* /*funcptr*/,
 
 namespace jac {
 
-constexpr int width = 1280/2;
-constexpr int height = 720/2;
+constexpr int width = 1280;
+constexpr int height = 720;
 
 display create_display()
 {
@@ -58,8 +58,7 @@ display create_display()
     auto* window = SDL_CreateWindow("Jac", SDL_WINDOWPOS_UNDEFINED,
                                     SDL_WINDOWPOS_UNDEFINED,
                                     width, height,
-                                    SDL_WINDOW_OPENGL |
-                                    SDL_WINDOW_ALLOW_HIGHDPI);
+                                    SDL_WINDOW_OPENGL);
 
     auto ctx = SDL_GL_CreateContext(window);
 
