@@ -15,7 +15,15 @@ add_executable(jac
     src/main_game_loop.cpp
     src/raw_model.cpp
     src/renderer.cpp
+    src/shader_program.cpp
+    src/static_shader.cpp
+    # This is just so the files appear in QtCreator
+    src/shaders/vertex_shader.vert
+    src/shaders/fragment_shader.frag
 )
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 target_include_directories(jac PRIVATE
     "${jac_SOURCE_DIR}/include"

@@ -32,6 +32,7 @@ void error_check_callback(const char* name, void* /*funcptr*/,
     while ((err = glad_glGetError()) != GL_NO_ERROR) {
         const char* msg = get_gl_error(err);
         SDL_Log("Got GL error \"%s\" in %s", msg, name);
+        SDL_assert(err != GL_NO_ERROR);
     }
 }
 
@@ -61,6 +62,8 @@ display create_display()
                                     SDL_WINDOW_ALLOW_HIGHDPI);
 
     auto ctx = SDL_GL_CreateContext(window);
+
+    SDL_GL_SetSwapInterval(1);
 
     gladLoadGLLoader(SDL_GL_GetProcAddress);
 

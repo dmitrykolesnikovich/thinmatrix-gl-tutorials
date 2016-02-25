@@ -59,7 +59,10 @@ public:
         return *this;
     }
 
-    ~multi_handle() { Deleter()(N, ids.data()); }
+    ~multi_handle()
+    {
+        Deleter()(N, ids.data());
+    }
 
     GLuint* operator&()
     {

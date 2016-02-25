@@ -2,6 +2,7 @@
 #include "display_manager.hpp"
 #include "loader.hpp"
 #include "renderer.hpp"
+#include "static_shader.hpp"
 
 #include "SDL.h"
 
@@ -12,10 +13,10 @@ int main()
     SDL_Init(SDL_INIT_VIDEO);
 
     auto display = jac::create_display();
-
     auto loader = jac::loader{};
-
     auto renderer = jac::renderer{};
+
+    auto shader = jac::static_shader{};
 
     std::vector<float> vertices = {
       -0.5f, 0.5f, 0.0f,
@@ -42,10 +43,11 @@ int main()
             }
         }
 
-        renderer.prepare();
-
         // game logic
+        renderer.prepare();
+        shader.start();
         renderer.render(model);
+        shader.stop();
         jac::update_display(display);
     }
 
