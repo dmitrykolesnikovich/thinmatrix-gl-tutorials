@@ -23,6 +23,7 @@ public:
     void load_projection_matrix(const glm::mat4& projection) const;
     void load_view_matrix(const camera& camera) const;
     void load_light(const light& light) const;
+    void load_shine_variables(float damper, float reflectivity) const;
 
 private:
     virtual void bind_attributes() override;

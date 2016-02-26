@@ -68,7 +68,8 @@ void renderer::render(const entity& entity, static_shader& shader)
                 entity.rot_z,
                 entity.scale);
     shader.load_transformation_matrix(transformation_matrix);
-
+    const auto& texture = model.texture;
+    shader.load_shine_variables(texture.shine_damper, texture.reflectivity);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, model.texture.texture_id);
     glDrawElements(GL_TRIANGLES, raw_model.vertex_count, GL_UNSIGNED_INT, 0);

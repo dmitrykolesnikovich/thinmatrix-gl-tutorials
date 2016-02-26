@@ -24,10 +24,12 @@ int main()
 
     auto model = jac::load_obj_model("dragon", loader);
     auto texture = jac::model_texture{loader.load_texture("white")};
+    texture.shine_damper = 10;
+    texture.reflectivity = 1;
     auto static_model = jac::textured_model{model, texture};
 
-    auto entity = jac::entity{static_model, {0, 0, -25}, 0, 0, 0, 1};
-    auto light = jac::light{{0.0f, 0.0f, -20.0f}, {1.0f, 1.0f, 1.0f}};
+    auto entity = jac::entity{static_model, {0, -2, -25}, 0, 0, 0, 1};
+    auto light = jac::light{{0.0f, 10.0f, -20.0f}, {1.0f, 1.0f, 1.0f}};
 
     auto camera = jac::camera{};
 

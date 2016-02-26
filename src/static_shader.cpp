@@ -14,6 +14,8 @@ struct static_shader::pimpl {
     int location_view_matrix = 0;
     int location_light_position = 0;
     int location_light_colour = 0;
+    int location_shine_damper = 0;
+    int location_reflectivity = 0;
 };
 
 static_shader::static_shader()
@@ -41,6 +43,8 @@ void static_shader::get_all_uniform_locations()
     priv->location_view_matrix = get_uniform_location("viewMatrix");
     priv->location_light_position = get_uniform_location("lightPosition");
     priv->location_light_colour = get_uniform_location("lightColour");
+    priv->location_shine_damper = get_uniform_location("shineDamper");
+    priv->location_reflectivity = get_uniform_location("reflectivity");
 }
 
 void static_shader::load_transformation_matrix(const glm::mat4& matrix) const
@@ -62,6 +66,12 @@ void static_shader::load_view_matrix(const camera& camera) const
 void static_shader::load_projection_matrix(const glm::mat4& projection) const
 {
     load_matrix(priv->location_projection_matrix, projection);
+}
+
+void static_shader::load_shine_variables(float damper, float reflectivity) const
+{
+    load_float(priv->location_shine_damper, damper);
+    load_float(priv->location_reflectivity, reflectivity);
 }
 
 }
