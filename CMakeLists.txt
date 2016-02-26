@@ -10,7 +10,9 @@ find_package(SDL2 REQUIRED)
 find_package(glm REQUIRED)
 
 add_executable(jac
+    src/camera.cpp
     src/display_manager.cpp
+    src/entity.cpp
     src/glad.c
     src/loader.cpp
     src/main_game_loop.cpp

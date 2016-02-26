@@ -57,6 +57,9 @@ shader_program::shader_program(const std::string& vertex_shader,
     glAttachShader(priv->program.get(), priv->fragment_shader.get());
 }
 
+shader_program::shader_program(shader_program&&) = default;
+shader_program& shader_program::operator=(shader_program&&) = default;
+
 shader_program::~shader_program()
 {
     stop();
@@ -72,12 +75,12 @@ void shader_program::link()
     get_all_uniform_locations();
 }
 
-void shader_program::start()
+void shader_program::start() const
 {
     glUseProgram(priv->program.get());
 }
 
-void shader_program::stop()
+void shader_program::stop() const
 {
     glUseProgram(0);
 }
@@ -88,30 +91,30 @@ void shader_program::bind_attribute(GLuint attribute,
     glBindAttribLocation(priv->program.get(), attribute, variable_name.c_str());
 }
 
-GLint shader_program::get_uniform_location(const std::string& uniform_name)
+GLint shader_program::get_uniform_location(const std::string& uniform_name) const
 {
     return glGetUniformLocation(priv->program.get(), uniform_name.c_str());
 }
 
-void shader_program::load_float(GLint location, float value)
+void shader_program::load_float(GLint location, float value) const
 {
     glUniform1f(location, value);
 }
 
-void shader_program::load_vector(int location, const glm::vec3& vec)
+void shader_program::load_vector(int location, const glm::vec3& vec) const
 {
     glUniform3fv(location, 1, glm::value_ptr(vec));
 }
 
-void shader_program::load_bool(int location, bool value)
+void shader_program::load_bool(int location, bool value) const
 {
     float v = value ? 1.0f : 0.0f;
     glUniform1f(location, v);
 }
 
-void shader_program::load_matrix(int location, const glm::mat4& matrix)
+void shader_program::load_matrix(int location, const glm::mat4& matrix) const
 {
-    glUniformMatrix4fv(location, GL_FALSE, 1, glm::value_ptr(matrix));
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 }
