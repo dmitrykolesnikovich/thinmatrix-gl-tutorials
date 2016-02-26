@@ -18,6 +18,7 @@ add_executable(jac
     src/main_game_loop.cpp
     src/maths.cpp
     src/model_texture.cpp
+    src/obj_loader.cpp
     src/raw_model.cpp
     src/renderer.cpp
     src/shader_program.cpp
