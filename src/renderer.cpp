@@ -49,7 +49,7 @@ renderer::~renderer() = default;
 void renderer::prepare()
 {
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.2f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -60,6 +60,7 @@ void renderer::render(const entity& entity, static_shader& shader)
     glBindVertexArray(raw_model.vao_id);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
     glm::mat4 transformation_matrix = create_transformation_matrix(
                 entity.position,
                 entity.rot_x,
@@ -73,6 +74,7 @@ void renderer::render(const entity& entity, static_shader& shader)
     glDrawElements(GL_TRIANGLES, raw_model.vertex_count, GL_UNSIGNED_INT, 0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
     glBindVertexArray(0);
 }
 

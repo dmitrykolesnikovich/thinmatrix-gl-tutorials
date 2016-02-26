@@ -19,6 +19,7 @@ public:
 
     raw_model load_to_vao(const std::vector<float>& data,
                           const std::vector<float>& texture_coords,
+                          const std::vector<float>& normals,
                           const std::vector<int>& indices);
 
     GLuint load_texture(const std::string& filename);

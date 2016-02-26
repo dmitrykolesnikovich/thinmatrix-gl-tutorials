@@ -63,6 +63,9 @@ raw_model load_obj_model(const std::string& filename,
 
     while (true) {
         std::getline(file, line);
+        if (line.empty()) {
+            continue;
+        }
 
         auto current_line = split(line);
         if (starts_with(line, "v ")) {
@@ -128,7 +131,7 @@ raw_model load_obj_model(const std::string& filename,
         vertices_array.push_back(vertex.z);
     }
 
-    return loader.load_to_vao(vertices_array, texture_array, indices);
+    return loader.load_to_vao(vertices_array, texture_array, normals_array, indices);
 }
 
 

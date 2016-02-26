@@ -9,16 +9,16 @@ void camera::move()
 {
     const auto state = SDL_GetKeyboardState(nullptr);
     if (state[SDL_SCANCODE_W]) {
-        position.z -= 0.02f;
+        position.z -= 0.04f;
     }
     if (state[SDL_SCANCODE_S]) {
-        position.z += 0.02f;
+        position.z += 0.04f;
     }
     if (state[SDL_SCANCODE_D]) {
-        position.x += 0.02f;
+        position.x += 0.04f;
     }
     if (state[SDL_SCANCODE_A]) {
-        position.x -= 0.02f;
+        position.x -= 0.04f;
     }
 }
 

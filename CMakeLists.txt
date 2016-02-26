@@ -14,6 +14,7 @@ add_executable(jac
     src/display_manager.cpp
     src/entity.cpp
     src/glad.c
+    src/light.cpp
     src/loader.cpp
     src/main_game_loop.cpp
     src/maths.cpp

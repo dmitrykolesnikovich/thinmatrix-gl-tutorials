@@ -12,6 +12,8 @@ struct static_shader::pimpl {
     int location_transformation_matrix = 0;
     int location_projection_matrix = 0;
     int location_view_matrix = 0;
+    int location_light_position = 0;
+    int location_light_colour = 0;
 };
 
 static_shader::static_shader()
@@ -29,6 +31,7 @@ void static_shader::bind_attributes()
 {
     bind_attribute(0, "position");
     bind_attribute(1, "textureCoords");
+    bind_attribute(2, "normal");
 }
 
 void static_shader::get_all_uniform_locations()
@@ -36,11 +39,19 @@ void static_shader::get_all_uniform_locations()
     priv->location_transformation_matrix = get_uniform_location("transformationMatrix");
     priv->location_projection_matrix = get_uniform_location("projectionMatrix");
     priv->location_view_matrix = get_uniform_location("viewMatrix");
+    priv->location_light_position = get_uniform_location("lightPosition");
+    priv->location_light_colour = get_uniform_location("lightColour");
 }
 
 void static_shader::load_transformation_matrix(const glm::mat4& matrix) const
 {
     load_matrix(priv->location_transformation_matrix, matrix);
+}
+
+void static_shader::load_light(const light& light) const
+{
+    load_vector(priv->location_light_position, light.position);
+    load_vector(priv->location_light_colour, light.colour);
 }
 
 void static_shader::load_view_matrix(const camera& camera) const

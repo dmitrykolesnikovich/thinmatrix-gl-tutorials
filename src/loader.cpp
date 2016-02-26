@@ -71,12 +71,14 @@ loader::~loader() = default;
 raw_model
 loader::load_to_vao(const std::vector<float>& positions,
                     const std::vector<float>& texture_coords,
+                    const std::vector<float>& normals,
                     const std::vector<int>& indices)
 {
     auto vao_id = priv->create_vao();
     priv->bind_indices_buffer(indices);
     priv->store_data_in_attribute_list(0, 3, positions);
     priv->store_data_in_attribute_list(1, 2, texture_coords);
+    priv->store_data_in_attribute_list(2, 3, normals);
     priv->unbind_vao();
     raw_model model{vao_id, int(indices.size())};
     return model;
@@ -101,6 +103,8 @@ loader::load_texture(const std::string& filename)
                  GL_UNSIGNED_BYTE, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     return texture_id;
 }

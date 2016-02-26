@@ -4,6 +4,7 @@
 #include "shader_program.hpp"
 
 #include "camera.hpp"
+#include "light.hpp"
 
 #include <glm/mat4x4.hpp>
 
@@ -21,6 +22,7 @@ public:
     void load_transformation_matrix(const glm::mat4& matrix) const;
     void load_projection_matrix(const glm::mat4& projection) const;
     void load_view_matrix(const camera& camera) const;
+    void load_light(const light& light) const;
 
 private:
     virtual void bind_attributes() override;
