@@ -17,6 +17,11 @@ struct terrain_shader::pimpl {
     int location_shine_damper = 0;
     int location_reflectivity = 0;
     int location_sky_colour = 0;
+    int location_background_texture = 0;
+    int location_r_texture = 0;
+    int location_g_texture = 0;
+    int location_b_texture = 0;
+    int location_blend_map = 0;
 };
 
 terrain_shader::terrain_shader()
@@ -47,6 +52,11 @@ void terrain_shader::get_all_uniform_locations()
     priv->location_shine_damper = get_uniform_location("shineDamper");
     priv->location_reflectivity = get_uniform_location("reflectivity");
     priv->location_sky_colour = get_uniform_location("skyColour");
+    priv->location_background_texture = get_uniform_location("backgroundTexture");
+    priv->location_r_texture = get_uniform_location("rTexture");
+    priv->location_g_texture = get_uniform_location("gTexture");
+    priv->location_b_texture = get_uniform_location("bTexture");
+    priv->location_blend_map = get_uniform_location("blendMap");
 }
 
 void terrain_shader::load_transformation_matrix(const glm::mat4& matrix) const
@@ -79,6 +89,15 @@ void terrain_shader::load_shine_variables(float damper, float reflectivity) cons
 void terrain_shader::load_sky_colour(float r, float g, float b) const
 {
     load_vector(priv->location_sky_colour, {r, g, b});
+}
+
+void terrain_shader::connect_texture_units() const
+{
+    load_int(priv->location_background_texture, 0);
+    load_int(priv->location_r_texture, 1);
+    load_int(priv->location_g_texture, 2);
+    load_int(priv->location_b_texture, 3);
+    load_int(priv->location_blend_map, 4);
 }
 
 }

@@ -3,7 +3,7 @@
 
 #include "SDL.h"
 
-constexpr float move_step = 0.04f;
+constexpr float move_step = 0.2f;
 
 namespace jac {
 

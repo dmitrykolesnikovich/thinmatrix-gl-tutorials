@@ -22,6 +22,7 @@ public:
 private:
     void load_model_matrix(const terrain& terrain) const;
     void prepare_terrain(const terrain& terrain) const;
+    void bind_textures(const terrain& terrain) const;
     void unbind_textured_model() const;
 
     const terrain_shader& shader;

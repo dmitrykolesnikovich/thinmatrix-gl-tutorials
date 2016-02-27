@@ -22,6 +22,20 @@ int main()
     auto display = jac::create_display();
     auto loader = jac::loader{};
 
+    // Terrain texure stuff
+    auto background_texture = jac::terrain_texture{loader.load_texture("grassy")};
+    auto r_texture = jac::terrain_texture{loader.load_texture("dirt")};
+    auto g_texture = jac::terrain_texture{loader.load_texture("pinkFlowers")};
+    auto b_texture = jac::terrain_texture{loader.load_texture("path")};
+    auto texture_pack = jac::terrain_texture_pack{background_texture, r_texture,
+            g_texture, b_texture};
+    auto blend_map = jac::terrain_texture{loader.load_texture("blendMap")};
+
+
+
+
+
+
     auto tree = jac::textured_model{jac::load_obj_model("tree", loader),
             jac::model_texture{loader.load_texture("tree")}};
 
@@ -39,25 +53,39 @@ int main()
             jac::model_texture{loader.load_texture("fern")}};
     fern.texture.has_transparency = true;
 
-    auto tree2 = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
+    auto bobble = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
             jac::model_texture{loader.load_texture("lowPolyTree")}};
 
-    auto light = jac::light{{3000, 2000, 2000}, {1.0f, 1.0f, 1.0f}};
+    auto light = jac::light{{20'000, 40'000, 20'000}, {1.0f, 1.0f, 1.0f}};
 
-    auto terrain = jac::terrain{0, -1, loader, jac::model_texture{loader.load_texture("grass")}};
-    auto terrain2 = jac::terrain{-1, -1, loader, jac::model_texture{loader.load_texture("grass")}};
+    auto terrain = jac::terrain{0, -1, loader, texture_pack, blend_map};
+    auto terrain2 = jac::terrain{-1, -1, loader, texture_pack, blend_map};
 
     std::vector<jac::entity> entities;
     std::random_device rd{};
     std::mt19937 gen{rd()};
-    std::uniform_int_distribution<> dist{-400, 400};
+    std::uniform_real_distribution<float> dist{0, 1.0f};
 
-    for (int i = 0; i < 500; i++) {
-        entities.push_back(jac::entity{tree, {dist(gen), 0, dist(gen)}, 0, 0, 0, 3});
-        entities.push_back(jac::entity{grass, {dist(gen), 0, dist(gen)}, 0, 0, 0, 1});
-        entities.push_back(jac::entity{flower, {dist(gen), 0, dist(gen)}, 0, 0, 0, 1});
-        entities.push_back(jac::entity{fern, {dist(gen), 0, dist(gen)}, 0, 0, 0, 0.6f});
-        entities.push_back(jac::entity{tree2, {dist(gen), 0, dist(gen)}, 0, 0, 0, 0.4f});
+    for (int i = 0; i < 400; i++) {
+        if (i % 7 == 0) {
+            entities.push_back(jac::entity{grass,
+                                           {dist(gen) * 400 - 200,  0, dist(gen) * -400},
+                                           0, 0, 0, 1.8f});
+            entities.push_back(jac::entity{flower,
+                                           {dist(gen) * 400 - 200,  0, dist(gen) * -400},
+                                           0, 0, 0, 2.3f});
+        }
+        if (i % 3 == 0) {
+            entities.push_back(jac::entity{fern,
+                                           {dist(gen) * 400 - 200,  0, dist(gen) * -400},
+                                           0, dist(gen) * 360, 0, 0.9f});
+            entities.push_back(jac::entity{bobble,
+                                           {dist(gen) * 800 - 400,  0, dist(gen) * -600},
+                                           0, dist(gen) * 360, 0, dist(gen) * 0.1f + 0.6f});
+            entities.push_back(jac::entity{tree,
+                                           {dist(gen) * 800 - 400,  0, dist(gen) * -600},
+                                           0, dist(gen) * 360, 0, dist(gen) * 1.0f + 4.0f});
+        }
     }
 
     auto camera = jac::camera{};

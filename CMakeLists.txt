@@ -29,6 +29,7 @@ add_executable(jac
     src/terrain.cpp
     src/terrain_renderer.cpp
     src/terrain_shader.cpp
+    src/terrain_texture.cpp
     src/textured_model.cpp
     # This is just so the files appear in QtCreator
     src/shaders/vertex_shader.vert

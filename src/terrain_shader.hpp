@@ -25,6 +25,7 @@ public:
     void load_light(const light& light) const;
     void load_shine_variables(float damper, float reflectivity) const;
     void load_sky_colour(float r, float g, float b) const;
+    void connect_texture_units() const;
 
 private:
     virtual void bind_attributes() override;

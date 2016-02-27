@@ -33,6 +33,7 @@ protected:
     void load_vector(GLint location, const glm::vec3& vector) const;
     void load_bool(GLint location, bool value) const;
     void load_matrix(GLint location, const glm::mat4& matrix) const;
+    void load_int(GLint location, int value) const;
 
 private:
     struct pimpl;

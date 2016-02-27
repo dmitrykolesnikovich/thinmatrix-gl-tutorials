@@ -55,11 +55,13 @@ jac::raw_model generate_terrain(jac::loader& loader){
 namespace jac {
 
 terrain::terrain(int grid_x, int grid_z, loader& loader,
-                 model_texture texture)
+                 terrain_texture_pack texture_pack,
+                 terrain_texture blend_map)
     : x{grid_x * size},
       z{grid_z * size},
       model{generate_terrain(loader)},
-      texture{std::move(texture)}
+      texture_pack{std::move(texture_pack)},
+      blend_map{std::move(blend_map)}
 {}
 
 

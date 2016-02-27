@@ -13,6 +13,7 @@ terrain_renderer::terrain_renderer(const terrain_shader& shader,
 {
     shader.start();
     shader.load_projection_matrix(projection_matrix);
+    shader.connect_texture_units();
     shader.stop();
 }
 
@@ -36,10 +37,24 @@ void terrain_renderer::prepare_terrain(const terrain& terrain) const
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
-    const auto& texture = terrain.texture;
-    shader.load_shine_variables(texture.shine_damper, texture.reflectivity);
+    bind_textures(terrain);
+    shader.load_shine_variables(1, 0);
+
+}
+
+void terrain_renderer::bind_textures(const terrain& terrain) const
+{
+    const auto& texture_pack = terrain.texture_pack;
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_pack.background_texture.texture_id);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_pack.r_texture.texture_id);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, texture_pack.g_texture.texture_id);
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, texture_pack.b_texture.texture_id);
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, terrain.blend_map.texture_id);
 }
 
 void terrain_renderer::load_model_matrix(const terrain& terrain) const
