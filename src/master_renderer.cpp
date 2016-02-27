@@ -25,6 +25,9 @@ namespace {
 constexpr float fov = 70; // degrees
 constexpr float near_plane = 0.1f;
 constexpr float far_plane = 1000.0f;
+constexpr float sky_red = 0.53f;
+constexpr float sky_green = 0.81f;
+constexpr float sky_blue = 0.92f;
 
 glm::mat4 create_projection_matrix()
 {
@@ -64,7 +67,7 @@ master_renderer::~master_renderer() = default;
 void master_renderer::prepare() const
 {
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
+    glClearColor(sky_red, sky_green, sky_blue, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -72,12 +75,14 @@ void master_renderer::render(const light& sun, const camera& cam) const
 {
     prepare();
     priv->shader.start();
+    priv->shader.load_sky_colour(sky_red, sky_green, sky_blue);
     priv->shader.load_light(sun);
     priv->shader.load_view_matrix(cam);
     priv->entity_renderer.render(priv->entities);
     priv->shader.stop();
 
     priv->terrain_shader.start();
+    priv->terrain_shader.load_sky_colour(sky_red, sky_green, sky_blue);
     priv->terrain_shader.load_light(sun);
     priv->terrain_shader.load_view_matrix(cam);
     priv->terrain_renderer.render(priv->terrains);

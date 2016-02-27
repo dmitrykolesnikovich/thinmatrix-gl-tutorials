@@ -17,6 +17,7 @@ struct static_shader::pimpl {
     int location_shine_damper = 0;
     int location_reflectivity = 0;
     int location_use_fake_lighting = 0;
+    int location_sky_colour = 0;
 };
 
 static_shader::static_shader()
@@ -47,6 +48,7 @@ void static_shader::get_all_uniform_locations()
     priv->location_shine_damper = get_uniform_location("shineDamper");
     priv->location_reflectivity = get_uniform_location("reflectivity");
     priv->location_use_fake_lighting = get_uniform_location("useFakeLighting");
+    priv->location_sky_colour = get_uniform_location("skyColour");
 }
 
 void static_shader::load_transformation_matrix(const glm::mat4& matrix) const
@@ -79,6 +81,11 @@ void static_shader::load_shine_variables(float damper, float reflectivity) const
 void static_shader::load_fake_lighting_variable(bool use_fake) const
 {
     load_bool(priv->location_use_fake_lighting, use_fake);
+}
+
+void static_shader::load_sky_colour(float r, float g, float b) const
+{
+    load_vector(priv->location_sky_colour, {r, g, b});
 }
 
 }

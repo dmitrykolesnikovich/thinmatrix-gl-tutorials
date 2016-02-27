@@ -30,10 +30,17 @@ int main()
     grass.texture.has_transparency = true;
     grass.texture.use_fake_lighting = true;
 
+    auto flower = jac::textured_model{grass.raw,
+            jac::model_texture{loader.load_texture("flower")}};
+    flower.texture.has_transparency = true;
+    flower.texture.use_fake_lighting = true;
+
     auto fern = jac::textured_model{jac::load_obj_model("fern", loader),
             jac::model_texture{loader.load_texture("fern")}};
     fern.texture.has_transparency = true;
-    fern.texture.use_fake_lighting = true;
+
+    auto tree2 = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
+            jac::model_texture{loader.load_texture("lowPolyTree")}};
 
     auto light = jac::light{{3000, 2000, 2000}, {1.0f, 1.0f, 1.0f}};
 
@@ -43,12 +50,14 @@ int main()
     std::vector<jac::entity> entities;
     std::random_device rd{};
     std::mt19937 gen{rd()};
-    std::uniform_int_distribution<> dist{-200, 200};
+    std::uniform_int_distribution<> dist{-400, 400};
 
     for (int i = 0; i < 500; i++) {
         entities.push_back(jac::entity{tree, {dist(gen), 0, dist(gen)}, 0, 0, 0, 3});
         entities.push_back(jac::entity{grass, {dist(gen), 0, dist(gen)}, 0, 0, 0, 1});
+        entities.push_back(jac::entity{flower, {dist(gen), 0, dist(gen)}, 0, 0, 0, 1});
         entities.push_back(jac::entity{fern, {dist(gen), 0, dist(gen)}, 0, 0, 0, 0.6f});
+        entities.push_back(jac::entity{tree2, {dist(gen), 0, dist(gen)}, 0, 0, 0, 0.4f});
     }
 
     auto camera = jac::camera{};
