@@ -4,6 +4,7 @@
 #include "maths.hpp"
 #include "terrain.hpp"
 #include "textured_model.hpp"
+#include "terrain_shader.hpp"
 
 namespace jac {
 
@@ -17,7 +18,7 @@ terrain_renderer::terrain_renderer(const terrain_shader& shader,
     shader.stop();
 }
 
-void terrain_renderer::render(const terrain_list &terrains) const
+void terrain_renderer::render(const std::vector<const terrain*>& terrains) const
 {
     for (const auto& terrain : terrains) {
         prepare_terrain(*terrain);

@@ -1,6 +1,8 @@
 
 #include "obj_loader.hpp"
 
+#include "raw_model.hpp"
+
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 

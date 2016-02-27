@@ -14,70 +14,59 @@
 
 namespace jac {
 
-struct shader_program::pimpl {
-    gl::program_handle program;
-    gl::shader_handle vertex_shader;
-    gl::shader_handle fragment_shader;
+gl::shader_handle shader_program::load_shader(const std::string& filename, GLenum type) {
+    std::fstream file{filename};
+    std::string data;
+    std::copy(std::istreambuf_iterator<char>{file},
+              std::istreambuf_iterator<char>{},
+              std::back_inserter(data));
 
-    gl::shader_handle load_shader(const std::string& filename, GLenum type) {
-        std::fstream file{filename};
-        std::string data;
-        std::copy(std::istreambuf_iterator<char>{file},
-                  std::istreambuf_iterator<char>{},
-                  std::back_inserter(data));
-
-        gl::shader_handle shader = glCreateShader(type);
-        const char *tmp = data.data();
-        glShaderSource(shader.get(), 1, &tmp, nullptr);
-        glCompileShader(shader.get());
-        GLint status = GL_FALSE;
-        glGetShaderiv(shader.get(), GL_COMPILE_STATUS, &status);
-        if (status == GL_FALSE) {
-            std::string log;
-            GLint len;
-            glGetShaderiv(shader.get(), GL_INFO_LOG_LENGTH, &len);
-            log.resize(len, ' ');
-            glGetShaderInfoLog(shader.get(), len, nullptr, &log[0]);
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", log.c_str());
-        }
-
-        return shader;
+    gl::shader_handle shader = glCreateShader(type);
+    const char *tmp = data.data();
+    glShaderSource(shader.get(), 1, &tmp, nullptr);
+    glCompileShader(shader.get());
+    GLint status = GL_FALSE;
+    glGetShaderiv(shader.get(), GL_COMPILE_STATUS, &status);
+    if (status == GL_FALSE) {
+        std::string log;
+        GLint len;
+        glGetShaderiv(shader.get(), GL_INFO_LOG_LENGTH, &len);
+        log.resize(len, ' ');
+        glGetShaderInfoLog(shader.get(), len, nullptr, &log[0]);
+        throw std::runtime_error(log);
     }
-};
 
-shader_program::shader_program(const std::string& vertex_shader,
-                               const std::string& fragment_shader)
-    : priv(std::make_unique<pimpl>())
-{
-    priv->vertex_shader = priv->load_shader(vertex_shader, GL_VERTEX_SHADER);
-    priv->fragment_shader = priv->load_shader(fragment_shader, GL_FRAGMENT_SHADER);
-    priv->program = glCreateProgram();
-
-    glAttachShader(priv->program.get(), priv->vertex_shader.get());
-    glAttachShader(priv->program.get(), priv->fragment_shader.get());
+    return shader;
 }
 
-shader_program::shader_program(shader_program&&) = default;
-shader_program& shader_program::operator=(shader_program&&) = default;
+shader_program::shader_program(const std::string& vertex_shader_file,
+                               const std::string& fragment_shader_file)
+    : program(glad_glCreateProgram()),
+      vertex_shader{load_shader(vertex_shader_file, GL_VERTEX_SHADER)},
+      fragment_shader{load_shader(fragment_shader_file, GL_FRAGMENT_SHADER)}
+{
+    glAttachShader(program.get(), vertex_shader.get());
+    glAttachShader(program.get(), fragment_shader.get());
+}
 
 shader_program::~shader_program()
 {
     stop();
-    glDetachShader(priv->program.get(), priv->vertex_shader.get());
-    glDetachShader(priv->program.get(), priv->fragment_shader.get());
+    glDetachShader(program.get(), vertex_shader.get());
+    glDetachShader(program.get(), fragment_shader.get());
 }
 
 void shader_program::link()
 {
     bind_attributes();
-    glLinkProgram(priv->program.get());
-    glValidateProgram(priv->program.get());
+    glLinkProgram(program.get());
+    glValidateProgram(program.get());
     get_all_uniform_locations();
 }
 
 void shader_program::start() const
 {
-    glUseProgram(priv->program.get());
+    glUseProgram(program.get());
 }
 
 void shader_program::stop() const
@@ -88,12 +77,12 @@ void shader_program::stop() const
 void shader_program::bind_attribute(GLuint attribute,
                                     const std::string& variable_name)
 {
-    glBindAttribLocation(priv->program.get(), attribute, variable_name.c_str());
+    glBindAttribLocation(program.get(), attribute, variable_name.c_str());
 }
 
 GLint shader_program::get_uniform_location(const std::string& uniform_name) const
 {
-    return glGetUniformLocation(priv->program.get(), uniform_name.c_str());
+    return glGetUniformLocation(program.get(), uniform_name.c_str());
 }
 
 void shader_program::load_float(GLint location, float value) const

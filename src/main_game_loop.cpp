@@ -1,4 +1,5 @@
 
+#include "camera.hpp"
 #include "display_manager.hpp"
 #include "entity.hpp"
 #include "light.hpp"

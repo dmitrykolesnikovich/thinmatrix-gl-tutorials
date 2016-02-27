@@ -7,7 +7,6 @@
 namespace jac {
 
 struct terrain_texture {
-    //gl::texture_handle texture;
     unsigned texture_id;
 };
 

@@ -3,21 +3,17 @@
 
 #include "shader_program.hpp"
 
-#include "camera.hpp"
-#include "light.hpp"
-
 #include <glm/mat4x4.hpp>
 
 namespace jac {
+
+struct camera;
+struct light;
 
 class terrain_shader final : public shader_program
 {
 public:
     terrain_shader();
-
-    terrain_shader(terrain_shader&&);
-    terrain_shader& operator=(terrain_shader&&);
-    virtual ~terrain_shader();
 
     void load_transformation_matrix(const glm::mat4& matrix) const;
     void load_projection_matrix(const glm::mat4& projection) const;
@@ -31,8 +27,19 @@ private:
     virtual void bind_attributes() override;
     virtual void get_all_uniform_locations() override;
 
-    struct pimpl;
-    std::unique_ptr<pimpl> priv;
+    int location_transformation_matrix = 0;
+    int location_projection_matrix = 0;
+    int location_view_matrix = 0;
+    int location_light_position = 0;
+    int location_light_colour = 0;
+    int location_shine_damper = 0;
+    int location_reflectivity = 0;
+    int location_sky_colour = 0;
+    int location_background_texture = 0;
+    int location_r_texture = 0;
+    int location_g_texture = 0;
+    int location_b_texture = 0;
+    int location_blend_map = 0;
 };
 
 

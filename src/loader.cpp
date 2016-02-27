@@ -2,6 +2,7 @@
 #include "loader.hpp"
 
 #include "gl_handles.hpp"
+#include "raw_model.hpp"
 #include "sdl_handles.hpp"
 
 #include "SDL.h"
@@ -10,63 +11,52 @@
 
 namespace jac {
 
-struct loader::pimpl {
-    std::vector<gl::vertex_array_handle> vaos;
-    std::vector<gl::buffer_handle> vbos;
-    std::vector<gl::texture_handle> textures;
+GLuint loader::create_vao()
+{
+    gl::vertex_array_handle vao;
+    glGenVertexArrays(1, &vao);
+    auto vao_id = vao.get();
+    glBindVertexArray(vao_id);
+    vaos.push_back(std::move(vao));
+    return vao_id;
+}
 
-    auto create_vao()
-    {
-        gl::vertex_array_handle vao;
-        glGenVertexArrays(1, &vao);
-        auto vao_id = vao.get();
-        glBindVertexArray(vao_id);
-        vaos.push_back(std::move(vao));
-        return vao_id;
-    }
+GLuint loader::create_vbo()
+{
+    gl::buffer_handle vbo;
+    glGenBuffers(1, &vbo);
+    auto vbo_id = vbo.get();
+    vbos.push_back(std::move(vbo));
+    return vbo_id;
+}
 
-    auto create_vbo()
-    {
-        gl::buffer_handle vbo;
-        glGenBuffers(1, &vbo);
-        auto vbo_id = vbo.get();
-        vbos.push_back(std::move(vbo));
-        return vbo_id;
-    }
+void loader::store_data_in_attribute_list(GLuint attrib_num,
+                                          int coord_size,
+                                          const std::vector<float>& data)
+{
+    GLuint vbo_id = create_vbo();
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 
-    void store_data_in_attribute_list(GLuint attrib_num,
-                                      int coord_size,
-                                      const std::vector<float>& data)
-    {
-        GLuint vbo_id = create_vbo();
-        glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float),
+                 data.data(), GL_STATIC_DRAW);
 
-        glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float),
-                     data.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(attrib_num, coord_size, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-        glVertexAttribPointer(attrib_num, coord_size, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
+void loader::unbind_vao()
+{
+    glBindVertexArray(0);
+}
 
-    void unbind_vao()
-    {
-        glBindVertexArray(0);
-    }
-
-    void bind_indices_buffer(const std::vector<int>& indices)
-    {
-        GLuint vbo = create_vbo();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int),
-                     indices.data(), GL_STATIC_DRAW);
-    }
-};
-
-loader::loader() : priv{std::make_unique<pimpl>()} {}
-loader::loader(loader&&) = default;
-loader& loader::operator=(loader&&) = default;
-loader::~loader() = default;
+void loader::bind_indices_buffer(const std::vector<int>& indices)
+{
+    GLuint vbo = create_vbo();
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int),
+                 indices.data(), GL_STATIC_DRAW);
+}
 
 raw_model
 loader::load_to_vao(const std::vector<float>& positions,
@@ -74,12 +64,12 @@ loader::load_to_vao(const std::vector<float>& positions,
                     const std::vector<float>& normals,
                     const std::vector<int>& indices)
 {
-    auto vao_id = priv->create_vao();
-    priv->bind_indices_buffer(indices);
-    priv->store_data_in_attribute_list(0, 3, positions);
-    priv->store_data_in_attribute_list(1, 2, texture_coords);
-    priv->store_data_in_attribute_list(2, 3, normals);
-    priv->unbind_vao();
+    auto vao_id = create_vao();
+    bind_indices_buffer(indices);
+    store_data_in_attribute_list(0, 3, positions);
+    store_data_in_attribute_list(1, 2, texture_coords);
+    store_data_in_attribute_list(2, 3, normals);
+    unbind_vao();
     raw_model model{vao_id, int(indices.size())};
     return model;
 }
@@ -95,7 +85,7 @@ loader::load_texture(const std::string& filename)
     gl::texture_handle texture;
     glGenTextures(1, &texture);
     GLuint texture_id = texture.get();
-    priv->textures.push_back(std::move(texture));
+    textures.push_back(std::move(texture));
 
     GLenum mode = comp == 4 ? GL_RGBA : GL_RGB;
     glBindTexture(GL_TEXTURE_2D, texture_id);

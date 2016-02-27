@@ -2,7 +2,6 @@
 #define JAC_OBJ_LOADER_HPP
 
 #include "loader.hpp"
-#include "raw_model.hpp"
 
 #include <string>
 

@@ -2,14 +2,12 @@
 #ifndef JAC_RAW_MODEL_HPP
 #define JAC_RAW_MODEL_HPP
 
-#include <glad/glad.h>
-
 #include <functional>
 
 namespace jac {
 
 struct raw_model {
-    GLuint vao_id;
+    unsigned vao_id;
     int vertex_count;
 };
 
@@ -28,7 +26,7 @@ struct hash<jac::raw_model> {
     using result_type = size_t;
 
     size_t operator()(const jac::raw_model& model) noexcept {
-        return hash<GLuint>{}(model.vao_id) ^
+        return hash<unsigned>{}(model.vao_id) ^
         hash<int>{}(model.vertex_count);
     }
 };

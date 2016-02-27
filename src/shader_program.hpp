@@ -2,22 +2,22 @@
 #ifndef JAC_SHADER_PROGRAM_HPP
 #define JAC_SHADER_PROGRAM_HPP
 
+#include "gl_handles.hpp"
+
 #include <glad/glad.h>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-#include <memory>
 #include <string>
 
 namespace jac {
 
 class shader_program {
 public:
-    shader_program(const std::string& vertex_shader,
-                   const std::string& fragment_shader);
-
-    shader_program(shader_program&&);
-    shader_program& operator=(shader_program&&);
+    shader_program(const std::string& vertex_shader_file,
+                   const std::string& fragment_shader_file);
+    shader_program(shader_program&&) = default;
+    shader_program& operator=(shader_program&&) = default;
     virtual ~shader_program();
 
     void start() const;
@@ -36,8 +36,11 @@ protected:
     void load_int(GLint location, int value) const;
 
 private:
-    struct pimpl;
-    std::unique_ptr<pimpl> priv;
+    gl::shader_handle load_shader(const std::string& filename, GLenum type);
+
+    gl::program_handle program;
+    gl::shader_handle vertex_shader;
+    gl::shader_handle fragment_shader;
 };
 
 }
