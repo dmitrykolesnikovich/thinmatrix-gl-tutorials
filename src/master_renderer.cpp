@@ -54,8 +54,7 @@ struct master_renderer::pimpl {
 master_renderer::master_renderer()
     : priv{std::make_unique<pimpl>()}
 {
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    enable_culling();
 }
 
 master_renderer::master_renderer(master_renderer&&) = default;
@@ -99,6 +98,17 @@ void master_renderer::process_entity(const entity& entity)
 
     auto& batch = priv->entities[entity_model];
     batch.push_back(&entity);
+}
+
+void master_renderer::enable_culling()
+{
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+}
+
+void master_renderer::disable_culling()
+{
+    glDisable(GL_CULL_FACE);
 }
 
 }

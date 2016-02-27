@@ -27,6 +27,10 @@ struct entity_renderer::pimpl {
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         const auto& texture = model.texture;
+        if (texture.has_transparency) {
+            master_renderer::disable_culling();
+        }
+        shader.load_fake_lighting_variable(texture.use_fake_lighting);
         shader.load_shine_variables(texture.shine_damper, texture.reflectivity);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, model.texture.texture_id);
@@ -45,6 +49,7 @@ struct entity_renderer::pimpl {
 
     void unbind_textured_model()
     {
+        master_renderer::enable_culling();
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);

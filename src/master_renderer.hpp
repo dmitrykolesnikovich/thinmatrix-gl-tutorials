@@ -31,6 +31,9 @@ public:
     void process_entity(const entity& entity);
     void process_terrain(const terrain& terrain);
 
+    static void enable_culling();
+    static void disable_culling();
+
 private:
     struct pimpl;
     std::unique_ptr<pimpl> priv;

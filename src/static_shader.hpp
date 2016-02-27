@@ -24,6 +24,7 @@ public:
     void load_view_matrix(const camera& camera) const;
     void load_light(const light& light) const;
     void load_shine_variables(float damper, float reflectivity) const;
+    void load_fake_lighting_variable(bool use_fake) const;
 
 private:
     virtual void bind_attributes() override;

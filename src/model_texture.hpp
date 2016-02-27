@@ -10,6 +10,8 @@ struct model_texture {
     unsigned texture_id = 0;
     float shine_damper = 1;
     float reflectivity = 0;
+    bool has_transparency = false;
+    bool use_fake_lighting = false;
 };
 
 inline bool operator==(const model_texture& lhs, const model_texture& rhs)

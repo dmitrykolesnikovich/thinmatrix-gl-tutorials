@@ -22,23 +22,33 @@ int main()
     auto display = jac::create_display();
     auto loader = jac::loader{};
 
-    auto model = jac::load_obj_model("tree", loader);
-    auto texture = jac::model_texture{loader.load_texture("tree")};
-    auto static_model = jac::textured_model{model, texture};
+    auto tree = jac::textured_model{jac::load_obj_model("tree", loader),
+            jac::model_texture{loader.load_texture("tree")}};
 
-    auto entity = jac::entity{static_model, {0, 0, -25}, 0, 0, 0, 1};
+    auto grass = jac::textured_model{jac::load_obj_model("grassModel", loader),
+            jac::model_texture{loader.load_texture("grassTexture")}};
+    grass.texture.has_transparency = true;
+    grass.texture.use_fake_lighting = true;
+
+    auto fern = jac::textured_model{jac::load_obj_model("fern", loader),
+            jac::model_texture{loader.load_texture("fern")}};
+    fern.texture.has_transparency = true;
+    fern.texture.use_fake_lighting = true;
+
     auto light = jac::light{{3000, 2000, 2000}, {1.0f, 1.0f, 1.0f}};
 
     auto terrain = jac::terrain{0, -1, loader, jac::model_texture{loader.load_texture("grass")}};
     auto terrain2 = jac::terrain{-1, -1, loader, jac::model_texture{loader.load_texture("grass")}};
 
-    std::vector<jac::entity> trees;
+    std::vector<jac::entity> entities;
     std::random_device rd{};
     std::mt19937 gen{rd()};
-    std::uniform_int_distribution<> dist{-100, 100};
+    std::uniform_int_distribution<> dist{-200, 200};
 
-    for (int i = 0; i < 200; i++) {
-        trees.push_back(jac::entity{static_model, {dist(gen), 0, dist(gen)}, 0, 0, 0, 1});
+    for (int i = 0; i < 500; i++) {
+        entities.push_back(jac::entity{tree, {dist(gen), 0, dist(gen)}, 0, 0, 0, 3});
+        entities.push_back(jac::entity{grass, {dist(gen), 0, dist(gen)}, 0, 0, 0, 1});
+        entities.push_back(jac::entity{fern, {dist(gen), 0, dist(gen)}, 0, 0, 0, 0.6f});
     }
 
     auto camera = jac::camera{};
@@ -56,15 +66,13 @@ int main()
             }
         }
 
-        entity.increase_rotation(0, 2, 0);
         camera.move();
         renderer.process_terrain(terrain);
         renderer.process_terrain(terrain2);
 
-        for (const auto& e : trees) {
+        for (const auto& e : entities) {
             renderer.process_entity(e);
         }
-        renderer.process_entity(entity);
         renderer.render(light, camera);
 
         jac::update_display(display);
