@@ -2,12 +2,11 @@
 #ifndef JAC_RENDERER_HPP
 #define JAC_RENDERER_HPP
 
-#include "entity.hpp"
-#include "static_shader.hpp"
-
-#include <memory>
+#include "master_renderer.hpp"
 
 namespace jac {
+
+class static_shader;
 
 class renderer {
 public:
@@ -18,7 +17,7 @@ public:
 
     void prepare();
 
-    void render(const entity& entity, static_shader& shader);
+    void render(const entity_map& entities) const;
 
 private:
     struct pimpl;

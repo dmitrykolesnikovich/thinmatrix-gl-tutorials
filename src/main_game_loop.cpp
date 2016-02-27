@@ -3,6 +3,7 @@
 #include "entity.hpp"
 #include "light.hpp"
 #include "loader.hpp"
+#include "master_renderer.hpp"
 #include "model_texture.hpp"
 #include "obj_loader.hpp"
 #include "renderer.hpp"
@@ -19,8 +20,6 @@ int main()
 
     auto display = jac::create_display();
     auto loader = jac::loader{};
-    auto shader = jac::static_shader{};
-    auto renderer = jac::renderer{shader};
 
     auto model = jac::load_obj_model("dragon", loader);
     auto texture = jac::model_texture{loader.load_texture("white")};
@@ -32,6 +31,9 @@ int main()
     auto light = jac::light{{0.0f, 10.0f, -20.0f}, {1.0f, 1.0f, 1.0f}};
 
     auto camera = jac::camera{};
+
+    auto renderer = jac::master_renderer{};
+
 
 
     bool quit_requested = false;
@@ -47,12 +49,9 @@ int main()
 
         entity.increase_rotation(0, 2, 0);
         camera.move();
-        renderer.prepare();
-        shader.start();
-        shader.load_light(light);
-        shader.load_view_matrix(camera);
-        renderer.render(entity, shader);
-        shader.stop();
+        renderer.process_entity(entity);
+        renderer.render(light, camera);
+
         jac::update_display(display);
     }
 
