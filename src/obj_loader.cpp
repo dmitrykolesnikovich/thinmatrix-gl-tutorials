@@ -48,7 +48,7 @@ raw_model load_obj_model(const std::string& filename,
                          loader& loader)
 {
     std::ifstream file{"res/" + filename + ".obj"};
-    //file.exceptions(std::ios::badbit | std::ios::failbit);
+    file.exceptions(std::ios::failbit);
 
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> textures;
