@@ -1,5 +1,5 @@
 
-#include "renderer.hpp"
+#include "entity_renderer.hpp"
 
 #include "entity.hpp"
 #include "maths.hpp"
@@ -10,31 +10,9 @@
 
 #include <glad/glad.h>
 
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-namespace {
-
-constexpr float fov = 70; // degrees
-constexpr float near_plane = 0.1f;
-constexpr float far_plane = 1000.0f;
-
-glm::mat4 create_projection_matrix()
-{
-    int w, h;
-    SDL_GL_GetDrawableSize(SDL_GL_GetCurrentWindow(), &w, &h);
-    // This is certainly easier than the Java version...
-    return glm::perspectiveFov(glm::radians(fov), float(w), float(h),
-                               near_plane, far_plane);
-}
-
-
-
-}
-
 namespace jac {
 
-struct renderer::pimpl {
+struct entity_renderer::pimpl {
     pimpl(const glm::mat4& mat, const static_shader& shader)
         : projection_matrix{mat}, shader{shader} {}
 
@@ -56,7 +34,7 @@ struct renderer::pimpl {
 
     void prepare_instance(const entity& entity)
     {
-        glm::mat4 transformation_matrix = create_transformation_matrix(
+        glm::mat4 transformation_matrix = maths::create_transformation_matrix(
                     entity.position,
                     entity.rot_x,
                     entity.rot_y,
@@ -75,28 +53,21 @@ struct renderer::pimpl {
 
 };
 
-renderer::renderer(const static_shader& shader)
-    : priv{std::make_unique<pimpl>(create_projection_matrix(), shader)}
+entity_renderer::entity_renderer(const static_shader& shader,
+                                 const glm::mat4& projection_matrix)
+    : priv{std::make_unique<pimpl>(projection_matrix, shader)}
 {
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
     shader.start();
     shader.load_projection_matrix(priv->projection_matrix);
     shader.stop();
 }
 
-renderer::renderer(renderer&&) = default;
-renderer& renderer::operator=(renderer&&) = default;
-renderer::~renderer() = default;
+entity_renderer::entity_renderer(entity_renderer&&) = default;
+entity_renderer& entity_renderer::operator=(entity_renderer&&) = default;
+entity_renderer::~entity_renderer() = default;
 
-void renderer::prepare()
-{
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.2f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
 
-void renderer::render(const entity_map &entities) const
+void entity_renderer::render(const entity_map &entities) const
 {
     for (const auto& entry : entities) {
         priv->prepare_textured_model(entry.first);

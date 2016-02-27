@@ -7,6 +7,7 @@
 #include <glm/mat4x4.hpp>
 
 namespace jac {
+namespace maths {
 
 glm::mat4 create_transformation_matrix(const glm::vec3& translation,
                                        float rx, float ry, float rz,
@@ -14,6 +15,7 @@ glm::mat4 create_transformation_matrix(const glm::vec3& translation,
 
 glm::mat4 create_view_matrix(const camera& cam);
 
+}
 }
 
 #endif

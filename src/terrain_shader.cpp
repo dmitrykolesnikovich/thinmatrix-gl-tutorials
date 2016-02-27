@@ -1,14 +1,14 @@
 
-#include "static_shader.hpp"
+#include "terrain_shader.hpp"
 
 #include "maths.hpp"
 
-constexpr char vertex_shader_source[] = "shaders/vertex_shader.vert";
-constexpr char fragment_shader_source[] = "shaders/fragment_shader.frag";
+constexpr char vertex_shader_source[] = "shaders/terrain_vertex_shader.vert";
+constexpr char fragment_shader_source[] = "shaders/terrain_fragment_shader.frag";
 
 namespace jac {
 
-struct static_shader::pimpl {
+struct terrain_shader::pimpl {
     int location_transformation_matrix = 0;
     int location_projection_matrix = 0;
     int location_view_matrix = 0;
@@ -18,25 +18,25 @@ struct static_shader::pimpl {
     int location_reflectivity = 0;
 };
 
-static_shader::static_shader()
+terrain_shader::terrain_shader()
     : shader_program{vertex_shader_source, fragment_shader_source},
       priv{std::make_unique<pimpl>()}
 {
     link();
 }
 
-static_shader::static_shader(static_shader&&) = default;
-static_shader& static_shader::operator=(static_shader&&) = default;
-static_shader::~static_shader() = default;
+terrain_shader::terrain_shader(terrain_shader&&) = default;
+terrain_shader& terrain_shader::operator=(terrain_shader&&) = default;
+terrain_shader::~terrain_shader() = default;
 
-void static_shader::bind_attributes()
+void terrain_shader::bind_attributes()
 {
     bind_attribute(0, "position");
     bind_attribute(1, "textureCoords");
     bind_attribute(2, "normal");
 }
 
-void static_shader::get_all_uniform_locations()
+void terrain_shader::get_all_uniform_locations()
 {
     priv->location_transformation_matrix = get_uniform_location("transformationMatrix");
     priv->location_projection_matrix = get_uniform_location("projectionMatrix");
@@ -47,28 +47,28 @@ void static_shader::get_all_uniform_locations()
     priv->location_reflectivity = get_uniform_location("reflectivity");
 }
 
-void static_shader::load_transformation_matrix(const glm::mat4& matrix) const
+void terrain_shader::load_transformation_matrix(const glm::mat4& matrix) const
 {
     load_matrix(priv->location_transformation_matrix, matrix);
 }
 
-void static_shader::load_light(const light& light) const
+void terrain_shader::load_light(const light& light) const
 {
     load_vector(priv->location_light_position, light.position);
     load_vector(priv->location_light_colour, light.colour);
 }
 
-void static_shader::load_view_matrix(const camera& camera) const
+void terrain_shader::load_view_matrix(const camera& camera) const
 {
     load_matrix(priv->location_view_matrix, maths::create_view_matrix(camera));
 }
 
-void static_shader::load_projection_matrix(const glm::mat4& projection) const
+void terrain_shader::load_projection_matrix(const glm::mat4& projection) const
 {
     load_matrix(priv->location_projection_matrix, projection);
 }
 
-void static_shader::load_shine_variables(float damper, float reflectivity) const
+void terrain_shader::load_shine_variables(float damper, float reflectivity) const
 {
     load_float(priv->location_shine_damper, damper);
     load_float(priv->location_reflectivity, reflectivity);

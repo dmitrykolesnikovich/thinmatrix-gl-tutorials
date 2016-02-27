@@ -13,6 +13,7 @@ add_executable(jac
     src/camera.cpp
     src/display_manager.cpp
     src/entity.cpp
+    src/entity_renderer.cpp
     src/glad.c
     src/light.cpp
     src/loader.cpp
@@ -22,14 +23,18 @@ add_executable(jac
     src/model_texture.cpp
     src/obj_loader.cpp
     src/raw_model.cpp
-    src/renderer.cpp
     src/shader_program.cpp
     src/static_shader.cpp
     src/stb_image.c
+    src/terrain.cpp
+    src/terrain_renderer.cpp
+    src/terrain_shader.cpp
     src/textured_model.cpp
     # This is just so the files appear in QtCreator
     src/shaders/vertex_shader.vert
     src/shaders/fragment_shader.frag
+    src/shaders/terrain_vertex_shader.vert
+    src/shaders/terrain_fragment_shader.frag
 )
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders
