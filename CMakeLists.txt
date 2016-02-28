@@ -22,6 +22,7 @@ add_executable(jac
     src/maths.cpp
     src/model_texture.cpp
     src/obj_loader.cpp
+    src/player.cpp
     src/raw_model.cpp
     src/shader_program.cpp
     src/static_shader.cpp

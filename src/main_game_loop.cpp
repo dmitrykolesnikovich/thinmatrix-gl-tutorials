@@ -5,11 +5,9 @@
 #include "light.hpp"
 #include "loader.hpp"
 #include "master_renderer.hpp"
-#include "model_texture.hpp"
 #include "obj_loader.hpp"
-#include "static_shader.hpp"
+#include "player.hpp"
 #include "terrain.hpp"
-#include "textured_model.hpp"
 
 #include "SDL.h"
 
@@ -33,10 +31,6 @@ int main()
     auto blend_map = jac::terrain_texture{loader.load_texture("blendMap")};
 
 
-
-
-
-
     auto tree = jac::textured_model{jac::load_obj_model("tree", loader),
             jac::model_texture{loader.load_texture("tree")}};
 
@@ -56,6 +50,8 @@ int main()
 
     auto bobble = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
             jac::model_texture{loader.load_texture("lowPolyTree")}};
+
+
 
     auto light = jac::light{{20'000, 40'000, 20'000}, {1.0f, 1.0f, 1.0f}};
 
@@ -93,6 +89,11 @@ int main()
 
     auto renderer = jac::master_renderer{};
 
+    auto bunny = jac::textured_model{jac::load_obj_model("stanfordBunny", loader),
+                jac::model_texture{loader.load_texture("white")}};
+
+    auto player = jac::player(bunny, {100, 0, -50}, 0, 0, 0, 1);
+
     bool quit_requested = false;
     while (!quit_requested) {
         SDL_Event e;
@@ -105,12 +106,15 @@ int main()
         }
 
         camera.move();
+        player.move();
         renderer.process_terrain(terrain);
         renderer.process_terrain(terrain2);
 
         for (const auto& e : entities) {
             renderer.process_entity(e);
         }
+
+        renderer.process_entity(player);
         renderer.render(light, camera);
 
         jac::update_display(display);

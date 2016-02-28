@@ -8,6 +8,15 @@
 namespace jac {
 
 struct entity {
+
+
+    entity(const textured_model &model, const glm::vec3 &position, float rot_x,
+           float rot_y, float rot_z, float scale) : model(model),
+                                                    position(position),
+                                                    rot_x(rot_x), rot_y(rot_y),
+                                                    rot_z(rot_z),
+                                                    scale(scale) { }
+
     textured_model model{};
     glm::vec3 position{};
     float rot_x = 0.0f;

@@ -3,7 +3,12 @@
 
 #include "sdl_handles.hpp"
 
+#include <chrono>
+
 namespace jac {
+
+using time_point = std::chrono::high_resolution_clock::time_point;
+using seconds = std::chrono::duration<float, std::chrono::seconds::period>;
 
 struct display {
     sdl_window_ptr window;
@@ -13,6 +18,8 @@ struct display {
 display create_display();
 
 void update_display(display& display);
+
+seconds get_frame_time_seconds();
 
 }
 

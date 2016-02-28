@@ -36,6 +36,10 @@ void error_check_callback(const char* name, void* /*funcptr*/,
     }
 }
 
+// For the record, I deeply object to these global variables
+static jac::time_point last_frame_time;
+static jac::seconds delta;
+
 }
 
 namespace jac {
@@ -58,7 +62,8 @@ display create_display()
     auto* window = SDL_CreateWindow("Jac", SDL_WINDOWPOS_UNDEFINED,
                                     SDL_WINDOWPOS_UNDEFINED,
                                     width, height,
-                                    SDL_WINDOW_OPENGL);
+                                    SDL_WINDOW_OPENGL |
+                                    SDL_WINDOW_RESIZABLE);
 
     auto ctx = SDL_GL_CreateContext(window);
 
@@ -74,12 +79,22 @@ display create_display()
         glViewport(0, 0, w, h);
     }
 
+    last_frame_time = std::chrono::high_resolution_clock::now();
+
     return { sdl_window_ptr(window), sdl_gl_context{ctx} };
+}
+
+jac::seconds get_frame_time_seconds()
+{
+    return delta;
 }
 
 void update_display(display& display)
 {
     SDL_GL_SwapWindow(display.window.get());
+    auto current_frame_time = std::chrono::high_resolution_clock::now();
+    delta = current_frame_time - last_frame_time;
+    last_frame_time = current_frame_time;
 }
 
 
