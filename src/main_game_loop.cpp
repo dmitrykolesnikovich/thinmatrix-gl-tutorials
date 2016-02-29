@@ -53,8 +53,8 @@ int main()
 
     auto light = jac::light{{20'000, 40'000, 20'000}, {1.0f, 1.0f, 1.0f}};
 
-    auto terrain = jac::terrain{0, -1, loader, texture_pack, blend_map};
-    auto terrain2 = jac::terrain{-1, -1, loader, texture_pack, blend_map};
+    auto terrain = jac::terrain{0, -1, loader, texture_pack, blend_map, "heightmap"};
+    auto terrain2 = jac::terrain{-1, -1, loader, texture_pack, blend_map, "heightmap"};
 
     std::vector<jac::entity> entities;
     std::random_device rd{};

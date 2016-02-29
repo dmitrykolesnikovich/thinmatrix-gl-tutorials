@@ -4,10 +4,9 @@
 #include "gl_handles.hpp"
 #include "raw_model.hpp"
 #include "sdl_handles.hpp"
+#include "stb_image.hpp"
 
 #include "SDL.h"
-
-#include <stb_image.h>
 
 namespace jac {
 
@@ -77,20 +76,18 @@ loader::load_to_vao(const std::vector<float>& positions,
 GLuint
 loader::load_texture(const std::string& filename)
 {
-    int w, h, comp;
-    auto data = stbi_load(("res/" + filename + ".png").c_str(), &w, &h, &comp,
-                          STBI_rgb_alpha);
-    SDL_assert(data != nullptr);
+    stb::image image("res/" + filename + ".png");
+    SDL_assert(image);
 
     gl::texture_handle texture;
     glGenTextures(1, &texture);
     GLuint texture_id = texture.get();
     textures.push_back(std::move(texture));
 
-    GLenum mode = comp == 4 ? GL_RGBA : GL_RGB;
+    GLenum mode = (image.num_components() == 4 ? GL_RGBA : GL_RGB);
     glBindTexture(GL_TEXTURE_2D, texture_id);
-    glTexImage2D(GL_TEXTURE_2D, 0, mode, w, h, 0, mode,
-                 GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, image.width(), image.height(), 0, mode,
+                 GL_UNSIGNED_BYTE, image.data());
     glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
