@@ -6,7 +6,7 @@
 
 namespace jac {
 
-struct camera;
+class camera;
 
 namespace maths {
 

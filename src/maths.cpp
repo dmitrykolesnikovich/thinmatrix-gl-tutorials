@@ -27,9 +27,9 @@ glm::mat4 create_view_matrix(const camera& cam)
 {
     glm::mat4 view_matrix{};
 
-    view_matrix = glm::rotate(view_matrix, glm::radians(cam.pitch), {1, 0, 0});
-    view_matrix = glm::rotate(view_matrix, glm::radians(cam.yaw), {0, 1, 0});
-    view_matrix = glm::translate(view_matrix, -cam.position);
+    view_matrix = glm::rotate(view_matrix, glm::radians(cam.get_pitch()), {1, 0, 0});
+    view_matrix = glm::rotate(view_matrix, glm::radians(cam.get_yaw()), {0, 1, 0});
+    view_matrix = glm::translate(view_matrix, -cam.get_position());
 
     return view_matrix;
 }

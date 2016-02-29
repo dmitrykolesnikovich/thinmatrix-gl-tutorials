@@ -37,7 +37,12 @@ void player::move() {
         upwards_speed = 0;
         is_in_air = false;
         position.y = terrain_height;
+    } else if (position.y > terrain_height) {
+        is_in_air = true;
     }
+
+    current_speed = 0;
+    current_turn_speed = 0;
 }
 
 void player::check_inputs() {
@@ -45,10 +50,10 @@ void player::check_inputs() {
 
     if (state[SDL_SCANCODE_W]) {
         current_speed = run_speed;
-    } else if (state[SDL_SCANCODE_D]) {
+    } else if (state[SDL_SCANCODE_S]) {
         current_speed = -run_speed;
     } else {
-        current_speed = 0;
+        //current_speed = 0;
     }
 
     if (state[SDL_SCANCODE_D]) {
@@ -56,12 +61,11 @@ void player::check_inputs() {
     } else if (state[SDL_SCANCODE_A]) {
         current_turn_speed = turn_speed;
     } else {
-        current_turn_speed = 0;
+        //current_turn_speed = 0;
     }
 
     if (state[SDL_SCANCODE_SPACE]) {
         jump();
-        is_in_air = true;
     }
 }
 
@@ -69,6 +73,26 @@ void player::jump() {
     if (!is_in_air) {
         upwards_speed += jump_power;
     }
+}
+
+void player::turn_left()
+{
+    current_turn_speed = -turn_speed;
+}
+
+void player::turn_right()
+{
+    current_turn_speed = turn_speed;
+}
+
+void player::move_forward()
+{
+    current_speed = run_speed;
+}
+
+void player::move_back()
+{
+    current_speed = -run_speed;
 }
 
 }

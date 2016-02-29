@@ -22,6 +22,7 @@ struct sdl_deleter {
 template <class T, void(*Deleter)(T*)>
 using sdl_ptr = std::unique_ptr<T, detail::sdl_deleter<T, Deleter>>;
 
+using sdl_game_controller_ptr = sdl_ptr<SDL_GameController, SDL_GameControllerClose>;
 using sdl_gl_context = sdl_ptr<void, SDL_GL_DeleteContext>;
 using sdl_surface_ptr = sdl_ptr<SDL_Surface, SDL_FreeSurface>;
 using sdl_window_ptr = sdl_ptr<SDL_Window, SDL_DestroyWindow>;

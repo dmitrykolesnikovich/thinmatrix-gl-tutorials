@@ -6,14 +6,19 @@
 
 namespace jac {
 
-struct player : entity {
+class player : public entity {
+public:
     using entity::entity;
 
     void move();
+    void jump();
+    void turn_left();
+    void turn_right();
+    void move_forward();
+    void move_back();
 
 private:
     void check_inputs();
-    void jump();
 
     float current_speed = 0;
     float current_turn_speed = 0;

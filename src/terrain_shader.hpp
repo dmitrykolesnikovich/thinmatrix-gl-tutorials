@@ -7,7 +7,7 @@
 
 namespace jac {
 
-struct camera;
+class camera;
 struct light;
 
 class terrain_shader final : public shader_program

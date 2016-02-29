@@ -16,7 +16,7 @@
 
 int main()
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
     auto display = jac::create_display();
     auto loader = jac::loader{};
@@ -51,8 +51,6 @@ int main()
     auto bobble = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
             jac::model_texture{loader.load_texture("lowPolyTree")}};
 
-
-
     auto light = jac::light{{20'000, 40'000, 20'000}, {1.0f, 1.0f, 1.0f}};
 
     auto terrain = jac::terrain{0, -1, loader, texture_pack, blend_map};
@@ -85,14 +83,19 @@ int main()
         }
     }
 
-    auto camera = jac::camera{};
+    auto dragon = jac::textured_model{jac::load_obj_model("dragon", loader),
+                jac::model_texture{loader.load_texture("grass")}};
+    entities.push_back(jac::entity{dragon, {100, 0, -50}, 0, 0, 0, 3.0});
+
+    auto person = jac::textured_model{jac::load_obj_model("person", loader),
+                jac::model_texture{loader.load_texture("playerTexture")}};
+
+    auto player = jac::player(person, {100, 0, -50}, 0, 0, 0, 1.0);
+    auto camera = jac::camera{player};
 
     auto renderer = jac::master_renderer{};
 
-    auto bunny = jac::textured_model{jac::load_obj_model("stanfordBunny", loader),
-                jac::model_texture{loader.load_texture("white")}};
 
-    auto player = jac::player(bunny, {100, 0, -50}, 0, 0, 0, 1);
 
     bool quit_requested = false;
     while (!quit_requested) {
@@ -101,6 +104,12 @@ int main()
             switch (e.type) {
             case SDL_QUIT:
                 quit_requested = true;
+                break;
+            case SDL_MOUSEMOTION:
+                camera.mouse_move(e.motion.xrel, e.motion.yrel);
+                break;
+            case SDL_MOUSEWHEEL:
+                camera.mouse_wheel(e.wheel.y);
                 break;
             }
         }
