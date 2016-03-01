@@ -39,8 +39,10 @@ void terrain_shader::get_all_uniform_locations()
     location_blend_map = get_uniform_location("blendMap");
 
     for (int i = 0; i < max_lights; i++) {
-        location_light_position[i] = get_uniform_location("lightPosition[" + std::to_string(i) + "]");
-        location_light_colour[i] = get_uniform_location("lightColour[" + std::to_string(i) + "]");
+        const auto i_s = std::to_string(i);
+        location_light_position[i] = get_uniform_location("lightPosition[" + i_s + "]");
+        location_light_colour[i] = get_uniform_location("lightColour[" + i_s + "]");
+        location_attenuation[i] = get_uniform_location("attenuation[" + i_s + "]");
     }
 }
 
@@ -55,10 +57,11 @@ void terrain_shader::load_lights(const std::vector<light>& lights) const
         if (i < lights.size()) {
             load_vector(location_light_position[i], lights[i].position);
             load_vector(location_light_colour[i], lights[i].colour);
-        }
-        else {
+            load_vector(location_attenuation[i], lights[i].attenuation);
+        } else {
             load_vector(location_light_position[i], glm::vec3{0, 0, 0});
             load_vector(location_light_colour[i], glm::vec3{0, 0, 0});
+            load_vector(location_attenuation[i], glm::vec3{1, 0, 0});
         }
     }
 }

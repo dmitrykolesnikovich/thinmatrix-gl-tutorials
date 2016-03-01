@@ -37,6 +37,7 @@ private:
     int location_view_matrix = 0;
     int location_light_position[max_lights] = { 0, };
     int location_light_colour[max_lights] = { 0, };
+    int location_attenuation[max_lights] = { 0, };
     int location_shine_damper = 0;
     int location_reflectivity = 0;
     int location_use_fake_lighting = 0;

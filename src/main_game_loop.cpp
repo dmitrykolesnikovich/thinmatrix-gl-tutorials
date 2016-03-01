@@ -54,11 +54,16 @@ int main()
     auto bobble = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
             jac::model_texture{loader.load_texture("lowPolyTree")}};
 
-    auto light = jac::light{{0, 10'000, -7'000}, {1.0f, 1.0f, 1.0f}};
-    auto lights = std::vector<jac::light>{};
-    lights.push_back(std::move(light));
-    lights.push_back(jac::light{{-200, 10, -200}, {10, 0, 0}});
-    lights.push_back(jac::light{{200, 10, 200}, {0, 0, 10}});
+    auto lamp = jac::textured_model{jac::load_obj_model("lamp", loader),
+        jac::model_texture{loader.load_texture("lamp")}};
+    lamp.texture.use_fake_lighting = true;
+
+    auto lights = std::vector<jac::light>{
+        jac::light{{0, 1000, 7000}, {0.5f, 0.5f, 0.5f}},
+        jac::light{{185, 10, -293}, {2, 0, 0}, {1, 0.01f, 0.002f}},
+        jac::light{{370, 17, -300}, {0, 2, 2}, {1, 0.01f, 0.002f}},
+        jac::light{{293, 7, -305}, {2, 2, 0}, {1, 0.01f, 0.002f}}
+    };
 
     auto terrain = jac::terrain{0, -1, loader, texture_pack, blend_map, "heightmap"};
 
@@ -95,6 +100,10 @@ int main()
                                            0, dist(gen) * 360, 0, dist(gen) * 1.0f + 4.0f});
         }
     }
+
+    entities.push_back(jac::entity{lamp, {185, -4.7f, -293}, 0, 0, 0, 1});
+    entities.push_back(jac::entity{lamp, {370, 4.2f, -300}, 0, 0, 0, 1});
+    entities.push_back(jac::entity{lamp, {293, -6.8f, -305}, 0, 0, 0, 1});
 
     //auto dragon = jac::textured_model{jac::load_obj_model("dragon", loader),
     //            jac::model_texture{loader.load_texture("grass")}};
