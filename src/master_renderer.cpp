@@ -58,19 +58,19 @@ void master_renderer::prepare() const
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void master_renderer::render(const light& sun, const camera& cam)
+void master_renderer::render(const std::vector<light>& lights, const camera& cam)
 {
     prepare();
     shader.start();
     shader.load_sky_colour(sky_red, sky_green, sky_blue);
-    shader.load_light(sun);
+    shader.load_lights(lights);
     shader.load_view_matrix(cam);
     entity_renderer.render(entities);
     shader.stop();
 
     terrain_shader.start();
     terrain_shader.load_sky_colour(sky_red, sky_green, sky_blue);
-    terrain_shader.load_light(sun);
+    terrain_shader.load_lights(lights);
     terrain_shader.load_view_matrix(cam);
     terrain_renderer.render(terrains);
     terrain_shader.stop();

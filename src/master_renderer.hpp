@@ -27,7 +27,7 @@ public:
 
     void prepare() const;
 
-    void render(const light& sun, const camera& cam);
+    void render(const std::vector<light>& sun, const camera& cam);
 
     void process_entity(const entity& entity);
     void process_terrain(const terrain& terrain);

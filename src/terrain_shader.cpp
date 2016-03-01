@@ -29,8 +29,6 @@ void terrain_shader::get_all_uniform_locations()
     location_transformation_matrix = get_uniform_location("transformationMatrix");
     location_projection_matrix = get_uniform_location("projectionMatrix");
     location_view_matrix = get_uniform_location("viewMatrix");
-    location_light_position = get_uniform_location("lightPosition");
-    location_light_colour = get_uniform_location("lightColour");
     location_shine_damper = get_uniform_location("shineDamper");
     location_reflectivity = get_uniform_location("reflectivity");
     location_sky_colour = get_uniform_location("skyColour");
@@ -39,6 +37,11 @@ void terrain_shader::get_all_uniform_locations()
     location_g_texture = get_uniform_location("gTexture");
     location_b_texture = get_uniform_location("bTexture");
     location_blend_map = get_uniform_location("blendMap");
+
+    for (int i = 0; i < max_lights; i++) {
+        location_light_position[i] = get_uniform_location("lightPosition[" + std::to_string(i) + "]");
+        location_light_colour[i] = get_uniform_location("lightColour[" + std::to_string(i) + "]");
+    }
 }
 
 void terrain_shader::load_transformation_matrix(const glm::mat4& matrix) const
@@ -46,10 +49,18 @@ void terrain_shader::load_transformation_matrix(const glm::mat4& matrix) const
     load_matrix(location_transformation_matrix, matrix);
 }
 
-void terrain_shader::load_light(const light& light) const
+void terrain_shader::load_lights(const std::vector<light>& lights) const
 {
-    load_vector(location_light_position, light.position);
-    load_vector(location_light_colour, light.colour);
+    for (int i = 0; i < max_lights; i++) {
+        if (i < lights.size()) {
+            load_vector(location_light_position[i], lights[i].position);
+            load_vector(location_light_colour[i], lights[i].colour);
+        }
+        else {
+            load_vector(location_light_position[i], glm::vec3{0, 0, 0});
+            load_vector(location_light_colour[i], glm::vec3{0, 0, 0});
+        }
+    }
 }
 
 void terrain_shader::load_view_matrix(const camera& camera) const

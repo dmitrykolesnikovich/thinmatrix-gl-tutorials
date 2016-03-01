@@ -54,7 +54,11 @@ int main()
     auto bobble = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
             jac::model_texture{loader.load_texture("lowPolyTree")}};
 
-    auto light = jac::light{{20'000, 40'000, 20'000}, {1.0f, 1.0f, 1.0f}};
+    auto light = jac::light{{0, 10'000, -7'000}, {1.0f, 1.0f, 1.0f}};
+    auto lights = std::vector<jac::light>{};
+    lights.push_back(std::move(light));
+    lights.push_back(jac::light{{-200, 10, -200}, {10, 0, 0}});
+    lights.push_back(jac::light{{200, 10, 200}, {0, 0, 10}});
 
     auto terrain = jac::terrain{0, -1, loader, texture_pack, blend_map, "heightmap"};
 
@@ -138,7 +142,7 @@ int main()
         }
 
         renderer.process_entity(player);
-        renderer.render(light, camera);
+        renderer.render(lights, camera);
         gui_renderer.render(guis);
 
         jac::update_display(display);
