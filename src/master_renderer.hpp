@@ -15,7 +15,7 @@
 namespace jac {
 
 class camera;
-struct entity;
+class entity;
 struct light;
 class terrain;
 struct textured_model;

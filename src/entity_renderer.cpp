@@ -21,6 +21,7 @@ void entity_renderer::prepare_textured_model(const jac::textured_model& model) c
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
     const auto& texture = model.texture;
+    shader.load_number_of_rows(model.texture.number_of_rows);
     if (texture.has_transparency) {
         master_renderer::disable_culling();
     }
@@ -33,12 +34,14 @@ void entity_renderer::prepare_textured_model(const jac::textured_model& model) c
 void entity_renderer::prepare_instance(const entity& entity) const
 {
     glm::mat4 transformation_matrix = maths::create_transformation_matrix(
-                entity.position,
-                entity.rot_x,
-                entity.rot_y,
-                entity.rot_z,
-                entity.scale);
+                entity.get_position(),
+                entity.get_rot_x(),
+                entity.get_rot_y(),
+                entity.get_rot_z(),
+                entity.get_scale());
     shader.load_transformation_matrix(transformation_matrix);
+    shader.load_offset(entity.get_texture_x_offset(),
+                       entity.get_texture_y_offset());
 }
 
 void entity_renderer::unbind_textured_model() const

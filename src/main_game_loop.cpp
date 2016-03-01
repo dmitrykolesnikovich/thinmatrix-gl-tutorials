@@ -47,6 +47,7 @@ int main()
     auto fern = jac::textured_model{jac::load_obj_model("fern", loader),
             jac::model_texture{loader.load_texture("fern")}};
     fern.texture.has_transparency = true;
+    fern.texture.number_of_rows = 2;
 
     auto bobble = jac::textured_model{jac::load_obj_model("lowPolyTree", loader),
             jac::model_texture{loader.load_texture("lowPolyTree")}};
@@ -59,10 +60,11 @@ int main()
     std::random_device rd{};
     std::mt19937 gen{rd()};
     std::uniform_real_distribution<float> dist{0, 1.0f};
+    std::uniform_int_distribution<int> rand_int{0, 3};
 
     auto rand_vec = [&] {
-        float x = dist(gen) * 800 - 400;
-        float z = dist(gen) * -600;
+        float x = dist(gen) * 800;
+        float z = dist(gen) * -800;
         return glm::vec3{x, terrain.get_height_of_terrain(x, z), z};
     };
 
@@ -76,7 +78,7 @@ int main()
                                            0, 0, 0, 2.3f});
         }
         if (i % 3 == 0) {
-            entities.push_back(jac::entity{fern,
+            entities.push_back(jac::entity{fern, rand_int(gen),
                                            rand_vec(),
                                            0, dist(gen) * 360, 0, 0.9f});
             entities.push_back(jac::entity{bobble,
@@ -88,14 +90,14 @@ int main()
         }
     }
 
-    auto dragon = jac::textured_model{jac::load_obj_model("dragon", loader),
-                jac::model_texture{loader.load_texture("grass")}};
-    entities.push_back(jac::entity{dragon, {100, 0, -50}, 0, 0, 0, 3.0});
+    //auto dragon = jac::textured_model{jac::load_obj_model("dragon", loader),
+    //            jac::model_texture{loader.load_texture("grass")}};
+    //entities.push_back(jac::entity{dragon, {100, 0, -50}, 0, 0, 0, 3.0});
 
     auto person = jac::textured_model{jac::load_obj_model("person", loader),
                 jac::model_texture{loader.load_texture("playerTexture")}};
 
-    auto player = jac::player(person, {100, 0, -50}, 0, 0, 0, 1.0);
+    auto player = jac::player(person, {400, 0, -400}, 0, 0, 0, 1.0);
     auto camera = jac::camera{player};
 
     auto renderer = jac::master_renderer{};

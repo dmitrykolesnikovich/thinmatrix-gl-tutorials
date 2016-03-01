@@ -12,6 +12,7 @@ struct model_texture {
     float reflectivity = 0;
     bool has_transparency = false;
     bool use_fake_lighting = false;
+    int number_of_rows = 1;
 };
 
 inline bool operator==(const model_texture& lhs, const model_texture& rhs)

@@ -10,7 +10,6 @@
 
 namespace jac {
 
-struct entity;
 class static_shader;
 struct textured_model;
 

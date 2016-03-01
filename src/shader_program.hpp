@@ -5,6 +5,7 @@
 #include "gl_handles.hpp"
 
 #include <glad/glad.h>
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
@@ -31,6 +32,7 @@ protected:
     GLint get_uniform_location(const std::string& uniform_name) const;
     void load_float(GLint location, float value) const;
     void load_vector(GLint location, const glm::vec3& vector) const;
+    void load_vector2d(GLint location, const glm::vec2& vector) const;
     void load_bool(GLint location, bool value) const;
     void load_matrix(GLint location, const glm::mat4& matrix) const;
     void load_int(GLint location, int value) const;

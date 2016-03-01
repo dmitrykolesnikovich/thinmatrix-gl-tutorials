@@ -24,13 +24,14 @@ void player::move(const terrain& terrain) {
     increase_rotation(0, current_turn_speed * get_frame_time_seconds().count(),
                     0);
     const auto distance = current_speed * get_frame_time_seconds().count();
-    const auto dx = distance * std::sin(to_radians(rot_y));
-    const auto dz = distance * std::cos(to_radians(rot_y));
+    const auto dx = distance * std::sin(to_radians(get_rot_y()));
+    const auto dz = distance * std::cos(to_radians(get_rot_y()));
     increase_position(dx, 0, dz);
 
     upwards_speed += gravity * get_frame_time_seconds().count();
     increase_position(0, upwards_speed * get_frame_time_seconds().count(), 0);
-    float terrain_height = terrain.get_height_of_terrain(position.x, position.z);
+    float terrain_height = terrain.get_height_of_terrain(get_position().x,
+                                                         get_position().z);
 
     if (position.y < terrain_height) {
         upwards_speed = 0;

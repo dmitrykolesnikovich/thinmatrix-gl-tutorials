@@ -22,6 +22,8 @@ public:
     void load_shine_variables(float damper, float reflectivity) const;
     void load_fake_lighting_variable(bool use_fake) const;
     void load_sky_colour(float r, float g, float b) const;
+    void load_number_of_rows(int num_rows) const;
+    void load_offset(float x_offset, float y_offset) const;
 
 private:
     virtual void bind_attributes() override;
@@ -36,6 +38,8 @@ private:
     int location_reflectivity = 0;
     int location_use_fake_lighting = 0;
     int location_sky_colour = 0;
+    int location_number_of_rows = 0;
+    int location_offset = 0;
 };
 
 

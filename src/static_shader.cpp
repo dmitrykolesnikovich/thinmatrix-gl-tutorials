@@ -33,6 +33,8 @@ void static_shader::get_all_uniform_locations()
     location_reflectivity = get_uniform_location("reflectivity");
     location_use_fake_lighting = get_uniform_location("useFakeLighting");
     location_sky_colour = get_uniform_location("skyColour");
+    location_number_of_rows = get_uniform_location("numberOfRows");
+    location_offset = get_uniform_location("offset");
 }
 
 void static_shader::load_transformation_matrix(const glm::mat4& matrix) const
@@ -71,5 +73,16 @@ void static_shader::load_sky_colour(float r, float g, float b) const
 {
     load_vector(location_sky_colour, {r, g, b});
 }
+
+void static_shader::load_number_of_rows(int num_rows) const
+{
+    load_float(location_number_of_rows, num_rows);
+}
+
+void static_shader::load_offset(float x_offset, float y_offset) const
+{
+    load_vector2d(location_offset, glm::vec2{x_offset, y_offset});
+}
+
 
 }

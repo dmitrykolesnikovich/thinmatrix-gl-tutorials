@@ -86,7 +86,7 @@ void master_renderer::process_terrain(const terrain& terrain)
 
 void master_renderer::process_entity(const entity& entity)
 {
-    const auto& entity_model = entity.model;
+    const auto& entity_model = entity.get_model();
 
     auto& batch = entities[entity_model];
     batch.push_back(&entity);

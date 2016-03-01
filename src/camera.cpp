@@ -26,7 +26,7 @@ void camera::move()
     float horizontal_distance = calculate_horizontal_distance();
     float vertical_distance = calculate_vertical_distance();
     calculate_camera_position(horizontal_distance, vertical_distance);
-    yaw = 180 - (player_.rot_y + angle_around_player);
+    yaw = 180 - (player_.get_rot_y() + angle_around_player);
 }
 
 camera::camera(const player& player_)
@@ -66,12 +66,12 @@ float camera::calculate_vertical_distance()
 void camera::calculate_camera_position(float horiz_distance,
                                        float vert_distance)
 {
-    float theta = player_.rot_y + angle_around_player;
+    float theta = player_.get_rot_y() + angle_around_player;
     float offset_x = horiz_distance * std::sin(to_radians(theta));
     float offset_z = horiz_distance * std::cos(to_radians(theta));
-    position.x = player_.position.x - offset_x;
-    position.y = player_.position.y + vert_distance;
-    position.z = player_.position.z - offset_z;
+    position.x = player_.get_position().x - offset_x;
+    position.y = player_.get_position().y + vert_distance;
+    position.z = player_.get_position().z - offset_z;
 }
 
 void camera::calculate_zoom()

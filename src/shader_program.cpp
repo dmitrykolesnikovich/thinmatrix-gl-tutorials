@@ -111,4 +111,11 @@ void shader_program::load_int(int location, int value) const
     glUniform1i(location, value);
 }
 
+void shader_program::load_vector2d(GLint location,
+                                   const glm::vec2& vector) const
+{
+    glUniform2fv(location, 1, glm::value_ptr(vector));
+}
+
+
 }
