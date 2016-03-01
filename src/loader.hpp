@@ -19,6 +19,8 @@ public:
                           const std::vector<float>& normals,
                           const std::vector<int>& indices);
 
+    raw_model load_to_vao(const std::vector<float>& positions);
+
     GLuint load_texture(const std::string& filename);
 
 private:

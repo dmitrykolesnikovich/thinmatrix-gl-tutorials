@@ -98,4 +98,12 @@ loader::load_texture(const std::string& filename)
     return texture_id;
 }
 
+raw_model loader::load_to_vao(const std::vector<float>& positions)
+{
+    GLuint vao_id = create_vao();
+    store_data_in_attribute_list(0, 2, positions);
+    unbind_vao();
+    return raw_model{vao_id, int(positions.size()/2)};
+}
+
 }

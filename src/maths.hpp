@@ -19,6 +19,9 @@ glm::mat4 create_transformation_matrix(const glm::vec3& translation,
                                        float rx, float ry, float rz,
                                        float scale);
 
+glm::mat4 create_transformation_matrix(const glm::vec2& translation,
+                                       const glm::vec2& scale);
+
 glm::mat4 create_view_matrix(const camera& cam);
 
 }

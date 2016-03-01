@@ -2,6 +2,8 @@
 #include "camera.hpp"
 #include "display_manager.hpp"
 #include "entity.hpp"
+#include "gui_texture.hpp"
+#include "gui_renderer.hpp"
 #include "light.hpp"
 #include "loader.hpp"
 #include "master_renderer.hpp"
@@ -102,6 +104,14 @@ int main()
 
     auto renderer = jac::master_renderer{};
 
+    auto guis = std::vector<jac::gui_texture>{};
+    guis.push_back(jac::gui_texture{loader.load_texture("health"),
+                                     glm::vec2(-0.75, 0.90),
+                                     glm::vec2(0.25, 0.25)});
+
+    auto gui_renderer = jac::gui_renderer{loader};
+
+
     bool quit_requested = false;
     while (!quit_requested) {
         SDL_Event e;
@@ -129,6 +139,7 @@ int main()
 
         renderer.process_entity(player);
         renderer.render(light, camera);
+        gui_renderer.render(guis);
 
         jac::update_display(display);
     }

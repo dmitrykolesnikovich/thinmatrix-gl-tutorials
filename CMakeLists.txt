@@ -15,7 +15,10 @@ add_executable(jac
     src/entity.cpp
     src/entity_renderer.cpp
     src/glad.c
-    src/light.cpp
+        src/gui_renderer.cpp
+        src/gui_shader.cpp
+        src/gui_texture.cpp
+        src/light.cpp
     src/loader.cpp
     src/main_game_loop.cpp
     src/master_renderer.cpp
@@ -35,6 +38,8 @@ add_executable(jac
     # This is just so the files appear in QtCreator
     src/shaders/vertex_shader.vert
     src/shaders/fragment_shader.frag
+        src/shaders/gui_vertex_shader.vert
+        src/shaders/gui_fragment_shader.frag
     src/shaders/terrain_vertex_shader.vert
     src/shaders/terrain_fragment_shader.frag
 )

@@ -44,6 +44,15 @@ float barrycentric(const glm::vec3& p1, const glm::vec3& p2,
     return l1 * p1.y + l2 * p2.y + l3 * p3.y;
 }
 
+glm::mat4 create_transformation_matrix(const glm::vec2& translation,
+                                       const glm::vec2& scale)
+{
+    glm::mat4 matrix{};
+    matrix = glm::translate(matrix, glm::vec3{translation, 0.0f});
+    matrix = glm::scale(matrix, glm::vec3{scale, 1.0f});
+    return matrix;
+}
+
 
 }
 }
