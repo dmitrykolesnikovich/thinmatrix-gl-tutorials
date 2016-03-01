@@ -54,31 +54,36 @@ int main()
     auto light = jac::light{{20'000, 40'000, 20'000}, {1.0f, 1.0f, 1.0f}};
 
     auto terrain = jac::terrain{0, -1, loader, texture_pack, blend_map, "heightmap"};
-    auto terrain2 = jac::terrain{-1, -1, loader, texture_pack, blend_map, "heightmap"};
 
     std::vector<jac::entity> entities;
     std::random_device rd{};
     std::mt19937 gen{rd()};
     std::uniform_real_distribution<float> dist{0, 1.0f};
 
+    auto rand_vec = [&] {
+        float x = dist(gen) * 800 - 400;
+        float z = dist(gen) * -600;
+        return glm::vec3{x, terrain.get_height_of_terrain(x, z), z};
+    };
+
     for (int i = 0; i < 400; i++) {
         if (i % 7 == 0) {
             entities.push_back(jac::entity{grass,
-                                           {dist(gen) * 400 - 200,  0, dist(gen) * -400},
+                                           rand_vec(),
                                            0, 0, 0, 1.8f});
             entities.push_back(jac::entity{flower,
-                                           {dist(gen) * 400 - 200,  0, dist(gen) * -400},
+                                           rand_vec(),
                                            0, 0, 0, 2.3f});
         }
         if (i % 3 == 0) {
             entities.push_back(jac::entity{fern,
-                                           {dist(gen) * 400 - 200,  0, dist(gen) * -400},
+                                           rand_vec(),
                                            0, dist(gen) * 360, 0, 0.9f});
             entities.push_back(jac::entity{bobble,
-                                           {dist(gen) * 800 - 400,  0, dist(gen) * -600},
+                                           rand_vec(),
                                            0, dist(gen) * 360, 0, dist(gen) * 0.1f + 0.6f});
             entities.push_back(jac::entity{tree,
-                                           {dist(gen) * 800 - 400,  0, dist(gen) * -600},
+                                           rand_vec(),
                                            0, dist(gen) * 360, 0, dist(gen) * 1.0f + 4.0f});
         }
     }
@@ -94,8 +99,6 @@ int main()
     auto camera = jac::camera{player};
 
     auto renderer = jac::master_renderer{};
-
-
 
     bool quit_requested = false;
     while (!quit_requested) {
@@ -115,9 +118,8 @@ int main()
         }
 
         camera.move();
-        player.move();
+        player.move(terrain);
         renderer.process_terrain(terrain);
-        renderer.process_terrain(terrain2);
 
         for (const auto& e : entities) {
             renderer.process_entity(e);

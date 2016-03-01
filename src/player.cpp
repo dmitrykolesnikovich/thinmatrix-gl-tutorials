@@ -2,6 +2,7 @@
 #include "player.hpp"
 
 #include "display_manager.hpp"
+#include "terrain.hpp"
 
 #include "SDL.h"
 
@@ -12,16 +13,13 @@ constexpr float turn_speed = 160;
 constexpr float gravity = -50;
 constexpr float jump_power = 30;
 
-constexpr float terrain_height = 0;
-
-
 constexpr float to_radians(float degrees) {
     return degrees * M_PI/180.0;
 }
 
 namespace jac {
 
-void player::move() {
+void player::move(const terrain& terrain) {
     check_inputs();
     increase_rotation(0, current_turn_speed * get_frame_time_seconds().count(),
                     0);
@@ -32,6 +30,7 @@ void player::move() {
 
     upwards_speed += gravity * get_frame_time_seconds().count();
     increase_position(0, upwards_speed * get_frame_time_seconds().count(), 0);
+    float terrain_height = terrain.get_height_of_terrain(position.x, position.z);
 
     if (position.y < terrain_height) {
         upwards_speed = 0;

@@ -24,7 +24,7 @@ void terrain_renderer::render(const std::vector<const terrain*>& terrains) const
         prepare_terrain(*terrain);
         load_model_matrix(*terrain);
 
-        glDrawElements(GL_TRIANGLES, terrain->model.vertex_count,
+        glDrawElements(GL_TRIANGLES, terrain->get_model().vertex_count,
                        GL_UNSIGNED_INT, 0);
 
         unbind_textured_model();
@@ -33,7 +33,7 @@ void terrain_renderer::render(const std::vector<const terrain*>& terrains) const
 
 void terrain_renderer::prepare_terrain(const terrain& terrain) const
 {
-    const auto& raw_model = terrain.model;
+    const auto& raw_model = terrain.get_model();
     glBindVertexArray(raw_model.vao_id);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -45,7 +45,7 @@ void terrain_renderer::prepare_terrain(const terrain& terrain) const
 
 void terrain_renderer::bind_textures(const terrain& terrain) const
 {
-    const auto& texture_pack = terrain.texture_pack;
+    const auto& texture_pack = terrain.get_texture_pack();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_pack.background_texture.texture_id);
     glActiveTexture(GL_TEXTURE1);
@@ -55,13 +55,13 @@ void terrain_renderer::bind_textures(const terrain& terrain) const
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, texture_pack.b_texture.texture_id);
     glActiveTexture(GL_TEXTURE4);
-    glBindTexture(GL_TEXTURE_2D, terrain.blend_map.texture_id);
+    glBindTexture(GL_TEXTURE_2D, terrain.get_blend_map().texture_id);
 }
 
 void terrain_renderer::load_model_matrix(const terrain& terrain) const
 {
     glm::mat4 transformation_matrix = maths::create_transformation_matrix(
-                glm::vec3{terrain.x, 0, terrain.z},
+                glm::vec3{terrain.get_x(), 0, terrain.get_z()},
                 0.0f, 0.0f, 0.0f, 1.0f);
     shader.load_transformation_matrix(transformation_matrix);
 }

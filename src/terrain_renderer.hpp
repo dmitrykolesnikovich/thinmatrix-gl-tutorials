@@ -7,7 +7,7 @@
 
 namespace jac {
 
-struct terrain;
+class terrain;
 struct textured_model;
 class terrain_shader;
 

@@ -6,11 +6,13 @@
 
 namespace jac {
 
+class terrain;
+
 class player : public entity {
 public:
     using entity::entity;
 
-    void move();
+    void move(const terrain& terrain);
     void jump();
     void turn_left();
     void turn_right();

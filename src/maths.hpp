@@ -10,6 +10,11 @@ class camera;
 
 namespace maths {
 
+float barrycentric(const glm::vec3& p1,
+                   const glm::vec3& p2,
+                   const glm::vec3& p3,
+                   const glm::vec2& pos);
+
 glm::mat4 create_transformation_matrix(const glm::vec3& translation,
                                        float rx, float ry, float rz,
                                        float scale);
