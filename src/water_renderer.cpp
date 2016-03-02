@@ -5,14 +5,21 @@
 #include "maths.hpp"
 #include "water_frame_buffers.hpp"
 #include "water_tile.hpp"
+#include "display_manager.hpp"
+
+#include <cmath>
 
 namespace jac {
+
+constexpr const char dudv_map_src[] = "waterDUDV";
+constexpr auto wave_speed = 0.03f;
 
 water_renderer::water_renderer(jac::loader& loader, water_shader shader_,
                                const glm::mat4& projection_matrix,
                                const water_frame_buffers& fbos)
     : shader{std::move(shader_)},
-      fbos{fbos}
+      fbos{fbos},
+      dudv_texture{loader.load_texture(dudv_map_src)}
 {
     shader.start();
     shader.connect_texture_units();
@@ -22,7 +29,7 @@ water_renderer::water_renderer(jac::loader& loader, water_shader shader_,
 }
 
 void water_renderer::render(const std::vector<water_tile>& water,
-                            const jac::camera& camera) const
+                            const jac::camera& camera)
 {
     prepare_render(camera);
     for (const auto& tile : water) {
@@ -34,16 +41,21 @@ void water_renderer::render(const std::vector<water_tile>& water,
     unbind();
 }
 
-void water_renderer::prepare_render(const jac::camera& camera) const
+void water_renderer::prepare_render(const jac::camera& camera)
 {
     shader.start();
     shader.load_view_matrix(camera);
+    move_factor += wave_speed * get_frame_time_seconds().count();
+    move_factor = std::fmod(move_factor, 1);
+    shader.load_move_factor(move_factor);
     glBindVertexArray(quad.vao_id);
     glEnableVertexAttribArray(0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, fbos.get_reflection_texture());
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, fbos.get_refraction_texture());
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, dudv_texture);
 }
 
 void water_renderer::unbind() const

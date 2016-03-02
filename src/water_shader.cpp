@@ -44,12 +44,20 @@ void water_shader::get_all_uniform_locations()
     location_model_matrix = get_uniform_location("modelMatrix");
     location_reflection_texture = get_uniform_location("reflectionTexture");
     location_refraction_texture = get_uniform_location("refractionTexture");
+    location_dudv_map = get_uniform_location("dudvMap");
+    location_move_factor = get_uniform_location("moveFactor");
 }
 
 void water_shader::connect_texture_units() const
 {
     load_int(location_reflection_texture, 0);
     load_int(location_refraction_texture, 1);
+    load_int(location_dudv_map, 2);
+}
+
+void water_shader::load_move_factor(float factor) const
+{
+    load_float(location_move_factor, factor);
 }
 
 

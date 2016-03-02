@@ -14,7 +14,7 @@ public:
     void load_projection_matrix(const glm::mat4& matrix) const;
     void load_view_matrix(const jac::camera& camera) const;
     void load_model_matrix(const glm::mat4& matrix) const;
-
+    void load_move_factor(float factor) const;
     void connect_texture_units() const;
 
 private:
@@ -26,6 +26,8 @@ private:
     int location_projection_matrix = 0;
     int location_reflection_texture = 0;
     int location_refraction_texture = 0;
+    int location_dudv_map = 0;
+    int location_move_factor = 0;
 };
 
 }

@@ -22,16 +22,18 @@ public:
                    const water_frame_buffers& fbos);
 
     void render(const std::vector<water_tile>& water,
-                const jac::camera& camera) const;
+                const jac::camera& camera);
 
 private:
-    void prepare_render(const jac::camera& camera) const;
+    void prepare_render(const jac::camera& camera);
     void unbind() const;
     void set_up_vao(jac::loader& loader);
 
     raw_model quad{};
     water_shader shader{};
     const water_frame_buffers& fbos;
+    GLuint dudv_texture = 0;
+    float move_factor = 0;
 };
 
 }
