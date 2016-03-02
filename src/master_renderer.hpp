@@ -33,6 +33,8 @@ public:
     void process_entity(const entity& entity);
     void process_terrain(const terrain& terrain);
 
+    const glm::mat4& get_projection_matrix() const { return projection_matrix; }
+
     static void enable_culling();
     static void disable_culling();
 

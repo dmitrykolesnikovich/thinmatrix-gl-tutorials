@@ -46,7 +46,7 @@ add_executable(jac
         src/shaders/skybox_fragment_shader.frag
     src/shaders/terrain_vertex_shader.vert
     src/shaders/terrain_fragment_shader.frag
-)
+        src/mouse_picker.cpp src/mouse_picker.hpp)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

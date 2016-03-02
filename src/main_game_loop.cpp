@@ -12,9 +12,13 @@
 #include "terrain.hpp"
 
 #include "SDL.h"
+#include "mouse_picker.hpp"
 
 #include <random>
 #include <vector>
+#include <iostream>
+
+#include <glm/gtx/io.hpp>
 
 int main()
 {
@@ -125,6 +129,8 @@ int main()
     auto gui_renderer = jac::gui_renderer{loader};
 
 
+    auto picker = jac::mouse_picker{camera, renderer.get_projection_matrix()};
+
     bool quit_requested = false;
     while (!quit_requested) {
         SDL_Event e;
@@ -142,15 +148,19 @@ int main()
             }
         }
 
-        camera.move();
         player.move(terrain);
+        camera.move();
+        picker.update();
+
+        // TODO: Something interesting with the picked ray
+
+        renderer.process_entity(player);
         renderer.process_terrain(terrain);
 
         for (const auto& e : entities) {
             renderer.process_entity(e);
         }
 
-        renderer.process_entity(player);
         renderer.render(lights, camera);
         gui_renderer.render(guis);
 
