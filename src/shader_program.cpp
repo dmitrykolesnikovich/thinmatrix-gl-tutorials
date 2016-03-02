@@ -51,9 +51,11 @@ shader_program::shader_program(const std::string& vertex_shader_file,
 
 shader_program::~shader_program()
 {
-    stop();
-    glDetachShader(program.get(), vertex_shader.get());
-    glDetachShader(program.get(), fragment_shader.get());
+    if (program.get() != 0) {
+        stop();
+        glDetachShader(program.get(), vertex_shader.get());
+        glDetachShader(program.get(), fragment_shader.get());
+    }
 }
 
 void shader_program::link()

@@ -13,6 +13,9 @@
 
 #include "SDL.h"
 #include "mouse_picker.hpp"
+#include "water_shader.hpp"
+#include "water_renderer.hpp"
+#include "water_tile.hpp"
 
 #include <random>
 #include <vector>
@@ -63,7 +66,7 @@ int main()
     lamp.texture.use_fake_lighting = true;
 
     auto lights = std::vector<jac::light>{
-        jac::light{{0, 1000, 7000}, {0.5f, 0.5f, 0.5f}},
+        jac::light{{0, 1000, 7000}, {1.0f, 1.0f, 1.0f}},
         jac::light{{185, 10, -293}, {2, 0, 0}, {1, 0.01f, 0.002f}},
         jac::light{{370, 17, -300}, {0, 2, 2}, {1, 0.01f, 0.002f}},
         jac::light{{293, 7, -305}, {2, 2, 0}, {1, 0.01f, 0.002f}}
@@ -116,7 +119,7 @@ int main()
     auto person = jac::textured_model{jac::load_obj_model("person", loader),
                 jac::model_texture{loader.load_texture("playerTexture")}};
 
-    auto player = jac::player(person, {400, 0, -400}, 0, 0, 0, 1.0);
+    auto player = jac::player(person, glm::vec3{400, 0, -400}, 0, 0, 0, 1.0f);
     auto camera = jac::camera{player};
 
     auto renderer = jac::master_renderer{loader};
@@ -128,8 +131,14 @@ int main()
 
     auto gui_renderer = jac::gui_renderer{loader};
 
-
     auto picker = jac::mouse_picker{camera, renderer.get_projection_matrix()};
+
+    auto water_renderer = jac::water_renderer{loader,
+                                              jac::water_shader{},
+                                              renderer.get_projection_matrix()};
+    auto waters = std::vector<jac::water_tile>{};
+    waters.push_back(jac::water_tile{247, -276, -7});
+
 
     bool quit_requested = false;
     while (!quit_requested) {
@@ -154,14 +163,8 @@ int main()
 
         // TODO: Something interesting with the picked ray
 
-        renderer.process_entity(player);
-        renderer.process_terrain(terrain);
-
-        for (const auto& e : entities) {
-            renderer.process_entity(e);
-        }
-
-        renderer.render(lights, camera);
+        renderer.render_scene(entities, player, terrain, lights, camera);
+        water_renderer.render(waters, camera);
         gui_renderer.render(guis);
 
         jac::update_display(display);

@@ -113,7 +113,8 @@ void skybox_renderer::bind_textures()
     time = std::fmod(time, 24000);
     GLuint texture1;
     GLuint texture2;
-    float blendFactor;
+    float blendFactor = 0.0;
+#if 0
     if(time >= 0 && time < 5000){
         texture1 = night_texture_id;
         texture2 = night_texture_id;
@@ -131,7 +132,9 @@ void skybox_renderer::bind_textures()
         texture2 = night_texture_id;
         blendFactor = (time - 21000)/(24000 - 21000);
     }
-
+#endif
+    texture1 = texture_id;
+    texture2 = texture_id;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture1);
     glActiveTexture(GL_TEXTURE1);

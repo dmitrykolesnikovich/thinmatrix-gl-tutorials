@@ -17,7 +17,11 @@ class shader_program {
 public:
     shader_program(const std::string& vertex_shader_file,
                    const std::string& fragment_shader_file);
-    shader_program(shader_program&&) = default;
+    shader_program(shader_program&& other)
+            : program(std::move(other.program)),
+              vertex_shader(std::move(other.vertex_shader)),
+              fragment_shader(std::move(other.fragment_shader)) {}
+
     shader_program& operator=(shader_program&&) = default;
     virtual ~shader_program();
 

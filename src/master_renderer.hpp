@@ -18,6 +18,7 @@ class camera;
 class entity;
 struct light;
 class loader;
+class player;
 class terrain;
 struct textured_model;
 
@@ -27,6 +28,12 @@ public:
     master_renderer(loader& loader);
 
     void prepare() const;
+
+    void render_scene(const std::vector<entity>& entities,
+                      const jac::player& player,
+                      const jac::terrain& terrain,
+                      const std::vector<light>& lights,
+                      const jac::camera& camera);
 
     void render(const std::vector<light>& sun, const camera& cam);
 

@@ -5,6 +5,7 @@
 #include "entity.hpp"
 #include "light.hpp"
 #include "loader.hpp"
+#include "player.hpp"
 #include "entity_renderer.hpp"
 #include "static_shader.hpp"
 #include "terrain_renderer.hpp"
@@ -104,5 +105,22 @@ void master_renderer::disable_culling()
 {
     glDisable(GL_CULL_FACE);
 }
+
+void master_renderer::render_scene(const std::vector<jac::entity>& entities,
+                                   const jac::player& player,
+                                   const jac::terrain& terrain,
+                                   const std::vector<light>& lights,
+                                   const jac::camera& camera)
+{
+    process_terrain(terrain);
+    process_entity(player);
+
+    for (const auto& e : entities) {
+        process_entity(e);
+    }
+
+    render(lights, camera);
+}
+
 
 }

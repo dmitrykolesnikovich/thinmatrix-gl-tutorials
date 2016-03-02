@@ -47,7 +47,7 @@ void main(void)
         vec3 specular =  dampedFactor * reflectivity * lightColour[i]/attFactor;
         totalSpecular += specular;
     }
-    totalDiffuse = max(totalDiffuse, 0.2);
+    totalDiffuse = max(totalDiffuse, 0.4);
 
     out_colour = vec4(totalDiffuse, 1.0) * textureColour + vec4(totalSpecular, 1.0);
     out_colour = mix(vec4(skyColour, 1.0), out_colour, visibility);

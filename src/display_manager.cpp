@@ -2,6 +2,8 @@
 #include "display_manager.hpp"
 
 #include <glad/glad.h>
+#include <stdexcept>
+#include <cassert>
 
 namespace {
 
@@ -32,7 +34,7 @@ void error_check_callback(const char* name, void* /*funcptr*/,
     while ((err = glad_glGetError()) != GL_NO_ERROR) {
         const char* msg = get_gl_error(err);
         SDL_Log("Got GL error \"%s\" in %s", msg, name);
-        SDL_assert(err != GL_NO_ERROR);
+        SDL_assert(err == GL_NO_ERROR);
     }
 }
 
