@@ -26,9 +26,9 @@ namespace {
 constexpr float fov = 70; // degrees
 constexpr float near_plane = 0.1f;
 constexpr float far_plane = 1000.0f;
-constexpr float sky_red = 0.53f;
-constexpr float sky_green = 0.81f;
-constexpr float sky_blue = 0.92f;
+constexpr float sky_red = 0.35f;//0.53f;
+constexpr float sky_green = 0.46f;//0.81f;
+constexpr float sky_blue = 0.5;//0.92f;
 
 }
 
@@ -75,7 +75,7 @@ void master_renderer::render(const std::vector<light>& lights, const camera& cam
     terrain_renderer.render(terrains);
     terrain_shader.stop();
 
-    skybox_renderer.render(cam);
+    skybox_renderer.render(cam, sky_red, sky_green, sky_blue);
 
     terrains.clear();
     entities.clear();

@@ -14,12 +14,16 @@ class skybox_renderer
 public:
     skybox_renderer(loader& loader, const glm::mat4& matrix);
 
-    void render(const camera& cam) const;
+    void render(const camera& cam, float r, float g, float b);
 
 private:
+    void bind_textures();
+
     raw_model cube{};
-    unsigned texture_id;
+    unsigned texture_id = 0;
+    unsigned night_texture_id = 0;
     skybox_shader shader{};
+    float time = 0.0f;
 };
 
 }
