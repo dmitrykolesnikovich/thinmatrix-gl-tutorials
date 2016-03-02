@@ -11,13 +11,15 @@ class camera {
 public:
     camera(const player& player);
 
-    glm::vec3 get_position() const;
+    const glm::vec3& get_position() const;
+    void set_position(const glm::vec3& pos) { position = pos; }
     float get_pitch() const;
     float get_yaw() const;
     float get_roll() const;
     void move();
     void mouse_wheel(int delta);
     void mouse_move(int dx, int dy);
+    void invert_pitch() { pitch = -pitch; }
 
 private:
     void calculate_zoom();

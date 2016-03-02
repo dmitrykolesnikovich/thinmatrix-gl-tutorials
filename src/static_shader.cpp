@@ -33,6 +33,7 @@ void static_shader::get_all_uniform_locations()
     location_sky_colour = get_uniform_location("skyColour");
     location_number_of_rows = get_uniform_location("numberOfRows");
     location_offset = get_uniform_location("offset");
+    location_plane = get_uniform_location("plane");
 
     for (int i = 0; i < max_lights; i++) {
         auto i_s = std::to_string(i);
@@ -96,6 +97,11 @@ void static_shader::load_number_of_rows(int num_rows) const
 void static_shader::load_offset(float x_offset, float y_offset) const
 {
     load_vector2d(location_offset, glm::vec2{x_offset, y_offset});
+}
+
+void static_shader::load_clip_plane(const glm::vec4& plane) const
+{
+    load_vector(location_plane, plane);
 }
 
 

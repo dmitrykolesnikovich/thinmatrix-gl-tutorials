@@ -40,6 +40,7 @@ protected:
     void load_bool(GLint location, bool value) const;
     void load_matrix(GLint location, const glm::mat4& matrix) const;
     void load_int(GLint location, int value) const;
+    void load_vector(GLint location, const glm::vec4& vector) const;
 
 private:
     gl::shader_handle load_shader(const std::string& filename, GLenum type);

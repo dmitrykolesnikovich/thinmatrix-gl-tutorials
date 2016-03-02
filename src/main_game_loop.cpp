@@ -143,10 +143,13 @@ int main()
     waters.push_back(jac::water_tile{247, -276, -7});
 
     auto fbos = jac::water_frame_buffers{};
-    auto gui = jac::gui_texture{fbos.get_reflection_texture(),
-                                glm::vec2{-0.5, -0.5},
-                                glm::vec2{0.5, 0.5}};
-    guis.push_back(gui);
+    auto refraction = jac::gui_texture{fbos.get_refraction_texture(),
+                                       glm::vec2{0.5, 0.5},
+                                       glm::vec2{0.25, 0.25}};
+    auto reflection = jac::gui_texture{fbos.get_reflection_texture(),
+                                       glm::vec2{-0.5, -0.5}, {0.25, 0.25}};
+    guis.push_back(reflection);
+    guis.push_back(refraction);
 
     bool quit_requested = false;
     while (!quit_requested) {
@@ -169,13 +172,30 @@ int main()
         camera.move();
         picker.update();
 
-        fbos.bind_reflection_frame_buffer();
-        renderer.render_scene(entities, player, terrain, lights, camera);
+        glEnable(GL_CLIP_DISTANCE0);
+
+        // Render water reflection
+        {
+            fbos.bind_reflection_frame_buffer();
+            auto cam2 = camera;
+            float distance = 2 * (cam2.get_position().y - waters[0].height);
+            auto pos = cam2.get_position() - glm::vec3{0, distance, 0};
+            cam2.set_position(pos);
+            cam2.invert_pitch();
+            renderer.render_scene(entities, player, terrain, lights, cam2,
+                                  glm::vec4{0, 1, 0, -waters[0].height});
+            fbos.unbind_current_frame_buffer();
+        }
+
+
+        fbos.bind_refraction_frame_buffer();
+        renderer.render_scene(entities, player, terrain, lights, camera,
+                              {0, -1, 0, waters[0].height});
         fbos.unbind_current_frame_buffer();
 
         // TODO: Something interesting with the picked ray
 
-        renderer.render_scene(entities, player, terrain, lights, camera);
+        renderer.render_scene(entities, player, terrain, lights, camera, {0, -1, 0, 2000});
         water_renderer.render(waters, camera);
         gui_renderer.render(guis);
 

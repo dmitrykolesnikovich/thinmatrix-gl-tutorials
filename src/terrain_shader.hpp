@@ -23,6 +23,7 @@ public:
     void load_shine_variables(float damper, float reflectivity) const;
     void load_sky_colour(float r, float g, float b) const;
     void connect_texture_units() const;
+    void load_clip_plane(const glm::vec4& plane) const;
 
 private:
     virtual void bind_attributes() override;
@@ -44,6 +45,7 @@ private:
     int location_g_texture = 0;
     int location_b_texture = 0;
     int location_blend_map = 0;
+    int location_plane = 0;
 };
 
 

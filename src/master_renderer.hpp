@@ -33,9 +33,12 @@ public:
                       const jac::player& player,
                       const jac::terrain& terrain,
                       const std::vector<light>& lights,
-                      const jac::camera& camera);
+                      const jac::camera& camera,
+                      const glm::vec4& clip_plane);
 
-    void render(const std::vector<light>& sun, const camera& cam);
+    void render(const std::vector<light>& sun,
+                const camera& cam,
+                const glm::vec4& clip_plane);
 
     void process_entity(const entity& entity);
     void process_terrain(const terrain& terrain);

@@ -33,7 +33,7 @@ camera::camera(const player& player_)
     : player_{player_}
 {}
 
-glm::vec3 camera::get_position() const
+const glm::vec3& camera::get_position() const
 {
     return position;
 }

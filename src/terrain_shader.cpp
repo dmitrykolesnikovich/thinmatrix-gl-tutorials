@@ -37,6 +37,7 @@ void terrain_shader::get_all_uniform_locations()
     location_g_texture = get_uniform_location("gTexture");
     location_b_texture = get_uniform_location("bTexture");
     location_blend_map = get_uniform_location("blendMap");
+    location_plane = get_uniform_location("plane");
 
     for (int i = 0; i < max_lights; i++) {
         const auto i_s = std::to_string(i);
@@ -95,5 +96,11 @@ void terrain_shader::connect_texture_units() const
     load_int(location_b_texture, 3);
     load_int(location_blend_map, 4);
 }
+
+void terrain_shader::load_clip_plane(const glm::vec4& plane) const
+{
+    load_vector(location_plane, plane);
+}
+
 
 }

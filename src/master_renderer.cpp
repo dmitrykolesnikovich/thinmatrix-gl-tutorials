@@ -59,10 +59,13 @@ void master_renderer::prepare() const
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void master_renderer::render(const std::vector<light>& lights, const camera& cam)
+void master_renderer::render(const std::vector<light>& lights,
+                             const jac::camera& cam,
+                             const glm::vec4& clip_plane)
 {
     prepare();
     shader.start();
+    shader.load_clip_plane(clip_plane);
     shader.load_sky_colour(sky_red, sky_green, sky_blue);
     shader.load_lights(lights);
     shader.load_view_matrix(cam);
@@ -70,6 +73,7 @@ void master_renderer::render(const std::vector<light>& lights, const camera& cam
     shader.stop();
 
     terrain_shader.start();
+    terrain_shader.load_clip_plane(clip_plane);
     terrain_shader.load_sky_colour(sky_red, sky_green, sky_blue);
     terrain_shader.load_lights(lights);
     terrain_shader.load_view_matrix(cam);
@@ -110,7 +114,8 @@ void master_renderer::render_scene(const std::vector<jac::entity>& entities,
                                    const jac::player& player,
                                    const jac::terrain& terrain,
                                    const std::vector<light>& lights,
-                                   const jac::camera& camera)
+                                   const jac::camera& camera,
+                                   const glm::vec4& clip_plane)
 {
     process_terrain(terrain);
     process_entity(player);
@@ -119,7 +124,7 @@ void master_renderer::render_scene(const std::vector<jac::entity>& entities,
         process_entity(e);
     }
 
-    render(lights, camera);
+    render(lights, camera, clip_plane);
 }
 
 
