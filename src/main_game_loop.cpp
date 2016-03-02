@@ -183,7 +183,7 @@ int main()
 
         fbos.bind_refraction_frame_buffer();
         renderer.render_scene(entities, player, terrain, lights, camera,
-                              {0, -1, 0, waters[0].height});
+                              {0, -1, 0, waters[0].height + 0.5f});
         fbos.unbind_current_frame_buffer();
 
         // TODO: Something interesting with the picked ray

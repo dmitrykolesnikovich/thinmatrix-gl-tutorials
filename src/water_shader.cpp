@@ -52,6 +52,7 @@ void water_shader::get_all_uniform_locations()
     location_normal_map = get_uniform_location("normalMap");
     location_light_position = get_uniform_location("lightPosition");
     location_light_colour = get_uniform_location("lightColour");
+    location_depth_map = get_uniform_location("depthMap");
 }
 
 void water_shader::connect_texture_units() const
@@ -60,6 +61,7 @@ void water_shader::connect_texture_units() const
     load_int(location_refraction_texture, 1);
     load_int(location_dudv_map, 2);
     load_int(location_normal_map, 3);
+    load_int(location_depth_map, 4);
 }
 
 void water_shader::load_move_factor(float factor) const

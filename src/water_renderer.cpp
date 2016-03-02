@@ -12,7 +12,7 @@
 namespace jac {
 
 constexpr const char dudv_map_src[] = "waterDUDV";
-constexpr const char normal_map_src[] = "matchingNormalMap";
+constexpr const char normal_map_src[] = "normal";
 constexpr auto wave_speed = 0.03f;
 
 water_renderer::water_renderer(jac::loader& loader, water_shader shader_,
@@ -62,10 +62,16 @@ void water_renderer::prepare_render(const jac::camera& camera, const jac::light&
     glBindTexture(GL_TEXTURE_2D, dudv_texture);
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, normal_texture);
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, fbos.get_refraction_depth_texture());
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void water_renderer::unbind() const
 {
+    glDisable(GL_BLEND);
     glDisableVertexAttribArray(0);
     glBindVertexArray(0);
     shader.stop();

@@ -35,6 +35,7 @@ private:
     int location_normal_map = 0;
     int location_light_colour = 0;
     int location_light_position = 0;
+    int location_depth_map = 0;
 };
 
 }
