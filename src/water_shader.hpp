@@ -15,13 +15,17 @@ public:
     void load_view_matrix(const jac::camera& camera) const;
     void load_model_matrix(const glm::mat4& matrix) const;
 
+    void connect_texture_units() const;
+
 private:
     virtual void bind_attributes() override;
     virtual void get_all_uniform_locations() override;
 
-    unsigned location_model_matrix = 0;
-    unsigned location_view_matrix = 0;
-    unsigned location_projection_matrix = 0;
+    int location_model_matrix = 0;
+    int location_view_matrix = 0;
+    int location_projection_matrix = 0;
+    int location_reflection_texture = 0;
+    int location_refraction_texture = 0;
 };
 
 }

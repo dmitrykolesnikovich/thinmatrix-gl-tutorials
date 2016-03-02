@@ -3,15 +3,19 @@
 
 #include "loader.hpp"
 #include "maths.hpp"
+#include "water_frame_buffers.hpp"
 #include "water_tile.hpp"
 
 namespace jac {
 
 water_renderer::water_renderer(jac::loader& loader, water_shader shader_,
-                               const glm::mat4& projection_matrix)
-    : shader{std::move(shader_)}
+                               const glm::mat4& projection_matrix,
+                               const water_frame_buffers& fbos)
+    : shader{std::move(shader_)},
+      fbos{fbos}
 {
     shader.start();
+    shader.connect_texture_units();
     shader.load_projection_matrix(projection_matrix);
     shader.stop();
     set_up_vao(loader);
@@ -36,6 +40,10 @@ void water_renderer::prepare_render(const jac::camera& camera) const
     shader.load_view_matrix(camera);
     glBindVertexArray(quad.vao_id);
     glEnableVertexAttribArray(0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fbos.get_reflection_texture());
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, fbos.get_refraction_texture());
 }
 
 void water_renderer::unbind() const

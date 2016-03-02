@@ -136,20 +136,13 @@ int main()
 
 
     /* Water renderer setup */
+    auto fbos = jac::water_frame_buffers{};
     auto water_renderer = jac::water_renderer{loader,
                                               jac::water_shader{},
-                                              renderer.get_projection_matrix()};
+                                              renderer.get_projection_matrix(),
+                                              fbos};
     auto waters = std::vector<jac::water_tile>{};
     waters.push_back(jac::water_tile{247, -276, -7});
-
-    auto fbos = jac::water_frame_buffers{};
-    auto refraction = jac::gui_texture{fbos.get_refraction_texture(),
-                                       glm::vec2{0.5, 0.5},
-                                       glm::vec2{0.25, 0.25}};
-    auto reflection = jac::gui_texture{fbos.get_reflection_texture(),
-                                       glm::vec2{-0.5, -0.5}, {0.25, 0.25}};
-    guis.push_back(reflection);
-    guis.push_back(refraction);
 
     bool quit_requested = false;
     while (!quit_requested) {
