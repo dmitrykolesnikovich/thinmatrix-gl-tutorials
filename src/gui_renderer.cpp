@@ -18,7 +18,7 @@ static const std::vector<float> positions{
 }
 
 gui_renderer::gui_renderer(loader& loader)
-    : quad{loader.load_to_vao(positions)}
+    : quad{loader.load_to_vao(positions, 2)}
 {}
 
 void gui_renderer::render(const std::vector<gui_texture>& guis) const

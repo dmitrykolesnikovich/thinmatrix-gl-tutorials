@@ -2,10 +2,10 @@
 #define JAC_MASTER_RENDERER_HPP
 
 #include "entity_renderer.hpp"
+#include "skybox_renderer.hpp"
 #include "static_shader.hpp"
 #include "terrain_renderer.hpp"
 #include "terrain_shader.hpp"
-
 
 #include <glm/mat4x4.hpp>
 
@@ -17,13 +17,14 @@ namespace jac {
 class camera;
 class entity;
 struct light;
+class loader;
 class terrain;
 struct textured_model;
 
 class master_renderer
 {
 public:
-    master_renderer();
+    master_renderer(loader& loader);
 
     void prepare() const;
 
@@ -44,6 +45,7 @@ private:
     static_shader shader{};
     glm::mat4 projection_matrix{create_projection_matrix()};
     entity_renderer entity_renderer{shader, projection_matrix};
+    skybox_renderer skybox_renderer;
     terrain_shader terrain_shader{};
     terrain_renderer terrain_renderer{terrain_shader, projection_matrix};
 

@@ -4,6 +4,7 @@
 #include "camera.hpp"
 #include "entity.hpp"
 #include "light.hpp"
+#include "loader.hpp"
 #include "entity_renderer.hpp"
 #include "static_shader.hpp"
 #include "terrain_renderer.hpp"
@@ -29,8 +30,6 @@ constexpr float sky_red = 0.53f;
 constexpr float sky_green = 0.81f;
 constexpr float sky_blue = 0.92f;
 
-
-
 }
 
 
@@ -46,7 +45,8 @@ glm::mat4 master_renderer::create_projection_matrix()
 }
 
 
-master_renderer::master_renderer()
+master_renderer::master_renderer(loader& loader)
+    : skybox_renderer{loader, projection_matrix}
 {
     enable_culling();
 }
@@ -74,6 +74,8 @@ void master_renderer::render(const std::vector<light>& lights, const camera& cam
     terrain_shader.load_view_matrix(cam);
     terrain_renderer.render(terrains);
     terrain_shader.stop();
+
+    skybox_renderer.render(cam);
 
     terrains.clear();
     entities.clear();

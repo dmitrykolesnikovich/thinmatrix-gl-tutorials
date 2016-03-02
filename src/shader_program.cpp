@@ -41,7 +41,7 @@ gl::shader_handle shader_program::load_shader(const std::string& filename, GLenu
 
 shader_program::shader_program(const std::string& vertex_shader_file,
                                const std::string& fragment_shader_file)
-    : program(glad_glCreateProgram()),
+    : program(glCreateProgram()),
       vertex_shader{load_shader(vertex_shader_file, GL_VERTEX_SHADER)},
       fragment_shader{load_shader(fragment_shader_file, GL_FRAGMENT_SHADER)}
 {

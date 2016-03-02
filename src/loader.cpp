@@ -98,12 +98,39 @@ loader::load_texture(const std::string& filename)
     return texture_id;
 }
 
-raw_model loader::load_to_vao(const std::vector<float>& positions)
+raw_model loader::load_to_vao(const std::vector<float>& positions,
+                              int dimensions)
 {
     GLuint vao_id = create_vao();
-    store_data_in_attribute_list(0, 2, positions);
+    store_data_in_attribute_list(0, dimensions, positions);
     unbind_vao();
-    return raw_model{vao_id, int(positions.size()/2)};
+    return raw_model{vao_id, int(positions.size()/dimensions)};
 }
+
+GLuint loader::load_cube_map(const std::vector<std::string>& texture_files)
+{
+    gl::texture_handle texture;
+    glGenTextures(1, &texture);
+    auto tex_id = texture.get();
+    textures.push_back(std::move(texture));
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, tex_id);
+
+    for (int i = 0; i < texture_files.size(); i++) {
+        auto image = stb::image("res/" + texture_files[i] + ".png", 4);
+        SDL_assert(image);
+
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB,
+                     image.width(), image.height(), 0,
+                     GL_RGBA, GL_UNSIGNED_BYTE, image.data());
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    return tex_id;
+}
+
 
 }

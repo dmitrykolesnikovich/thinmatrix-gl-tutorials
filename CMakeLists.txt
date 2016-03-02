@@ -28,6 +28,8 @@ add_executable(jac
     src/player.cpp
     src/raw_model.cpp
     src/shader_program.cpp
+        src/skybox_renderer.cpp
+        src/skybox_shader.cpp
     src/static_shader.cpp
     src/stb_image.c
     src/terrain.cpp
@@ -40,6 +42,8 @@ add_executable(jac
     src/shaders/fragment_shader.frag
         src/shaders/gui_vertex_shader.vert
         src/shaders/gui_fragment_shader.frag
+        src/shaders/skybox_vertex_shader.vert
+        src/shaders/skybox_fragment_shader.frag
     src/shaders/terrain_vertex_shader.vert
     src/shaders/terrain_fragment_shader.frag
 )

@@ -115,7 +115,7 @@ int main()
     auto player = jac::player(person, {400, 0, -400}, 0, 0, 0, 1.0);
     auto camera = jac::camera{player};
 
-    auto renderer = jac::master_renderer{};
+    auto renderer = jac::master_renderer{loader};
 
     auto guis = std::vector<jac::gui_texture>{};
     guis.push_back(jac::gui_texture{loader.load_texture("health"),
