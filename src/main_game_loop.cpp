@@ -189,7 +189,7 @@ int main()
         // TODO: Something interesting with the picked ray
 
         renderer.render_scene(entities, player, terrain, lights, camera, {0, -1, 0, 2000});
-        water_renderer.render(waters, camera);
+        water_renderer.render(waters, camera, lights.front());
         gui_renderer.render(guis);
 
         jac::update_display(display);

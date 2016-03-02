@@ -10,6 +10,7 @@
 
 namespace jac {
 
+struct light;
 class loader;
 struct water_tile;
 class water_frame_buffers;
@@ -22,10 +23,11 @@ public:
                    const water_frame_buffers& fbos);
 
     void render(const std::vector<water_tile>& water,
-                const jac::camera& camera);
+                const jac::camera& camera,
+                const light& sun);
 
 private:
-    void prepare_render(const jac::camera& camera);
+    void prepare_render(const jac::camera& camera, const light& sun);
     void unbind() const;
     void set_up_vao(jac::loader& loader);
 
@@ -33,6 +35,7 @@ private:
     water_shader shader{};
     const water_frame_buffers& fbos;
     GLuint dudv_texture = 0;
+    GLuint normal_texture = 0;
     float move_factor = 0;
 };
 

@@ -2,6 +2,7 @@
 #include "water_shader.hpp"
 
 #include "camera.hpp"
+#include "light.hpp"
 #include "maths.hpp"
 
 constexpr char vertex_shader_source[] = "shaders/water_vertex_shader.vert";
@@ -48,6 +49,9 @@ void water_shader::get_all_uniform_locations()
     location_dudv_map = get_uniform_location("dudvMap");
     location_move_factor = get_uniform_location("moveFactor");
     location_camera_position = get_uniform_location("cameraPosition");
+    location_normal_map = get_uniform_location("normalMap");
+    location_light_position = get_uniform_location("lightPosition");
+    location_light_colour = get_uniform_location("lightColour");
 }
 
 void water_shader::connect_texture_units() const
@@ -55,11 +59,18 @@ void water_shader::connect_texture_units() const
     load_int(location_reflection_texture, 0);
     load_int(location_refraction_texture, 1);
     load_int(location_dudv_map, 2);
+    load_int(location_normal_map, 3);
 }
 
 void water_shader::load_move_factor(float factor) const
 {
     load_float(location_move_factor, factor);
+}
+
+void water_shader::load_light(const light& sun) const
+{
+    load_vector(location_light_position, sun.position);
+    load_vector(location_light_colour, sun.colour);
 }
 
 
