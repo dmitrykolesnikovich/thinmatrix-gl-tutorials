@@ -25,6 +25,7 @@ void water_shader::load_view_matrix(const jac::camera& camera) const
 {
     auto matrix = maths::create_view_matrix(camera);
     load_matrix(location_view_matrix, matrix);
+    load_vector(location_camera_position, camera.get_position());
 }
 
 void water_shader::load_model_matrix(const glm::mat4& matrix) const
@@ -46,6 +47,7 @@ void water_shader::get_all_uniform_locations()
     location_refraction_texture = get_uniform_location("refractionTexture");
     location_dudv_map = get_uniform_location("dudvMap");
     location_move_factor = get_uniform_location("moveFactor");
+    location_camera_position = get_uniform_location("cameraPosition");
 }
 
 void water_shader::connect_texture_units() const

@@ -28,6 +28,7 @@ private:
     int location_refraction_texture = 0;
     int location_dudv_map = 0;
     int location_move_factor = 0;
+    int location_camera_position = 0;
 };
 
 }
