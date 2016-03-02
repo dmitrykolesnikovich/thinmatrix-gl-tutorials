@@ -47,8 +47,10 @@ add_executable(jac
         src/shaders/skybox_fragment_shader.frag
     src/shaders/terrain_vertex_shader.vert
     src/shaders/terrain_fragment_shader.frag
+        src/water_frame_buffers.cpp
+        src/water_renderer.cpp
         src/water_shader.cpp
-        src/water_tile.cpp src/water_renderer.cpp src/water_renderer.hpp)
+        src/water_tile.cpp)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

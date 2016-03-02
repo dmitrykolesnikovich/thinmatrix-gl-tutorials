@@ -95,6 +95,12 @@ struct gl_program_deleter {
     }
 };
 
+struct gl_renderbuffer_deleter {
+    void operator() (GLsizei count, GLuint* ptr) const {
+        glDeleteRenderbuffers(count, ptr);
+    }
+};
+
 struct gl_shader_deleter {
     void operator()(GLuint handle) const {
         glDeleteShader(handle);
@@ -118,6 +124,7 @@ struct gl_vertex_array_deleter {
 using buffer_handle = detail::multi_handle<detail::gl_buffer_deleter>;
 using framebuffer_handle = detail::multi_handle<detail::gl_framebuffer_deleter>;
 using program_handle = detail::handle<detail::gl_program_deleter>;
+using renderbuffer_handle = detail::multi_handle<detail::gl_renderbuffer_deleter>;
 using shader_handle = detail::handle<detail::gl_shader_deleter>;
 using texture_handle = detail::multi_handle<detail::gl_texture_deleter>;
 using vertex_array_handle = detail::multi_handle<detail::gl_vertex_array_deleter>;

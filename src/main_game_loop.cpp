@@ -16,6 +16,7 @@
 #include "water_shader.hpp"
 #include "water_renderer.hpp"
 #include "water_tile.hpp"
+#include "water_frame_buffers.hpp"
 
 #include <random>
 #include <vector>
@@ -133,12 +134,19 @@ int main()
 
     auto picker = jac::mouse_picker{camera, renderer.get_projection_matrix()};
 
+
+    /* Water renderer setup */
     auto water_renderer = jac::water_renderer{loader,
                                               jac::water_shader{},
                                               renderer.get_projection_matrix()};
     auto waters = std::vector<jac::water_tile>{};
     waters.push_back(jac::water_tile{247, -276, -7});
 
+    auto fbos = jac::water_frame_buffers{};
+    auto gui = jac::gui_texture{fbos.get_reflection_texture(),
+                                glm::vec2{-0.5, -0.5},
+                                glm::vec2{0.5, 0.5}};
+    guis.push_back(gui);
 
     bool quit_requested = false;
     while (!quit_requested) {
@@ -160,6 +168,10 @@ int main()
         player.move(terrain);
         camera.move();
         picker.update();
+
+        fbos.bind_reflection_frame_buffer();
+        renderer.render_scene(entities, player, terrain, lights, camera);
+        fbos.unbind_current_frame_buffer();
 
         // TODO: Something interesting with the picked ray
 
