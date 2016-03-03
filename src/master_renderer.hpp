@@ -56,10 +56,10 @@ private:
 
     static_shader shader{};
     glm::mat4 projection_matrix{create_projection_matrix()};
-    entity_renderer entity_renderer{shader, projection_matrix};
-    skybox_renderer skybox_renderer;
-    terrain_shader terrain_shader{};
-    terrain_renderer terrain_renderer{terrain_shader, projection_matrix};
+    jac::entity_renderer entity_renderer{shader, projection_matrix};
+    jac::skybox_renderer skybox_renderer;
+    jac::terrain_shader terrain_shader{};
+    jac::terrain_renderer terrain_renderer{terrain_shader, projection_matrix};
 
     entity_map entities;
     terrain_list terrains;
